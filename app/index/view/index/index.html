@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>传则业务管理系统</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__STATIC__/css/global.css" media="all">
+		<link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
+		<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
+	</head>
+
+	<body>
+		<div class="layui-layout layui-layout-admin">
+<div class="layui-header header header-demo">
+				<div class="layui-main">
+					<a class="logo" style="left: 0;" href="http://beginner.zhengjinfan.cn/demo/beginner_admin/">
+						<span style="font-size: 22px;">传则业务管理系统</span>
+					</a>
+					<ul class="layui-nav">
+						<li class="layui-nav-item">
+							<a href="javascript:alert('已清除缓存!');location.reload();">清除缓存</a>
+						</li>
+						<!--<li class="layui-nav-item">
+							<a href="#" target="_blank">浏览网站</a>
+						</li>-->
+						<li class="layui-nav-item">
+							<a href="javascript:;" class="admin-header-user">
+							
+								<i class="layui-icon layui-icon-face-smile-b" style="top: 1px; font-size: 12px;"></i><span>{:session('name')}</span>
+							</a>
+							<dl class="layui-nav-child">
+								<!--<dd>
+									<a href="javascript:;"><i class="fa fa-user-circle" aria-hidden="true"></i> 个人信息</a>
+								</dd>
+								<dd>
+									<a href="javascript:;"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a>
+								</dd>-->
+								<dd>
+									<a href="#" class="logout"><i class="layui-icon" style="top: 1px; font-size: 12px;">&#xe65c;</i> 注销</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 左边菜单 -->
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll">
+					<ul class="layui-nav layui-nav-tree admin-nav-tree">
+						<!-- <foreach name="menus" item="v"> -->
+						{foreach name="menus" as item="v" } 
+						<li class="layui-nav-item">
+
+							<a href="javascript:;">{$v.menu_name}</a>
+							<dl class="layui-nav-child">
+								<!-- <foreach name="v[$v['id']]" item="val"> -->
+								{foreach $v[$v['id']] as $val}
+								
+								<dd>
+									<a href="javascript:;" data-url="/{$val['action']}">
+										<span style="display: none;">{$val['id']}</span>
+										<i class="layui-icon" style="top: 1px; font-size: 18px;">{:html_entity_decode($val['icon'])}</i>
+										<cite>{$val.menu_name}</cite>
+									</a>
+								</dd>
+								<!-- </foreach> -->
+								{/foreach}
+							</dl>
+						</li>
+						<!-- </foreach> -->
+						{/foreach}
+						<li class="layui-nav-item layui-nav-itemed">
+							<a href="javascript:;">工具</a>
+							<dl class="layui-nav-child">
+								<dd>
+									<a href="javascript:;" data-url="index/index/tool1">
+										<span style="display: none;">0</span>
+										<i class="layui-icon" style="top: 1px; font-size: 18px;">{:html_entity_decode('&#xe664;')}</i>
+										<cite>小大写金额转换</cite>
+									</a>
+								</dd>
+							</dl>
+						</li>
+
+						
+					</ul>
+				</div>
+			</div>
+			<!-- 左边菜单 -->
+			
+			<div class="layui-body" style="bottom: 0;">
+				<div class="layui-tab admin-nav-card layui-tab-brief" style="color:black;font-family: SimHei;" lay-filter="admin-tab">
+					<ul class="layui-tab-title" id="admin-tab">
+						<li class="layui-this">
+							<i class="layui-icon" style="top: 2px; font-size: 16px;">&#xe609;</i>
+							<cite>主页</cite>
+						</li>
+					</ul>
+					<div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;" id="admin-tab-container">
+						<div class="layui-tab-item layui-show">
+							<iframe src="main"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-footer footer footer-demo">
+				<div class="layui-main">
+					<p>2019 &copy;
+						<a href="/">传则业务管理系统</a>
+					</p>
+				</div>
+			</div>
+			<div class="site-tree-mobile layui-hide">
+				<i class="layui-icon">&#xe602;</i>
+			</div>
+			<div class="site-mobile-shade"></div>
+			<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+
+			<script>
+				layui.use(['element', 'layer'], function() {
+					var element = layui.element,
+						$ = layui.jquery,
+						layer = layui.layer;
+
+					//iframe自适应
+					$(window).on('resize', function() {
+						var $content = $('.admin-nav-card .layui-tab-content');
+						$content.height($(this).height() - 147);
+						$content.find('iframe').each(function() {
+							$(this).height($content.height());
+						});
+					}).resize();
+
+					//添加tab
+					var $tabs = $('#admin-tab');
+					var $container = $('#admin-tab-container');
+					//绑定 nav 点击事件
+					$('ul.admin-nav-tree').find('dd > a').each(function() {
+						var $this = $(this);
+						//获取设定的url
+						var url = $this.data('url');
+						if(url !== undefined) {
+							$this.on('click', function() {
+								var iframe = '<iframe src="' + url + '"></iframe>';
+								var aHtml = $this.html();
+								var count = 0;
+								var tabIndex = $this.find('span')[0].innerText;
+								 $tabs.find('li').each(function(i, e) {
+								 	var $cite = $(this).children('cite');
+								 	if($cite.text() === $this.find('cite').text()) {
+								 		count++;
+								 		
+								 	};
+								 });
+								//tab不存在
+								if(count === 0) {
+									
+									aHtml +=  '<i class="layui-icon layui-refresh layui-icon-refresh-3" style="font-size:10px;}"></i>';//添加刷新样式
+									aHtml += '<i class="layui-icon layui-unselect layui-tab-close">&#x1006;</i>';//添加删除样式
+									
+									var $li = $tabs.find('li');
+									//添加tab
+									element.tabAdd('admin-tab', {
+										title: aHtml,
+										content: iframe,
+										id: tabIndex 
+									});
+									//iframe 自适应
+									var $content = $('.admin-nav-card .layui-tab-content');
+									$content.find('iframe').each(function() {
+										$(this).height($content.height());
+									});
+									//绑定关闭事件
+									$tabs = $('#admin-tab');
+									var $li = $tabs.find('li');
+									$li.eq($li.length - 1).children('i.layui-tab-close').on('click', function() {
+										element.tabDelete('admin-tab', $(this).parent('li').attr('lay-id')).init();
+										
+										
+									});
+
+									//绑定刷新事件
+									$li.eq($li.length - 1).children('i.layui-refresh').on('click', function() {
+										var src=$(".layui-tab-item.layui-show").find("iframe").attr("src");
+										$(".layui-tab-item.layui-show").find("iframe").attr("src",src);
+										
+									});
+									//获取焦点
+									element.tabChange('admin-tab', tabIndex);
+
+								} else {
+									//切换tab
+									element.tabChange('admin-tab', tabIndex);
+								}
+							});
+						}
+					});
+
+					$('#user').on('click', function() {
+						$('#user-item').toggle();
+					});
+
+					//手机设备的简单适配
+					var treeMobile = $('.site-tree-mobile'),
+						shadeMobile = $('.site-mobile-shade');
+					treeMobile.on('click', function() {
+						$('body').addClass('site-mobile');
+					});
+					shadeMobile.on('click', function() {
+						$('body').removeClass('site-mobile');
+					});
+					$('.logout').on('click',function(){
+						layer.open(
+							{
+							  content: '确认退出登录吗？'
+							  ,btn: ['确认', '取消']
+							  ,yes: function(index, layero){
+							    window.location.href="{:url('index/login/logout')}";
+							  }
+							  ,btn2: function(index, layero){
+							    
+							  }
+							  ,cancel: function(){ 
+							    
+							  }
+						})
+					})
+				});
+			</script>
+		</div>
+	</body>
+
+</html>

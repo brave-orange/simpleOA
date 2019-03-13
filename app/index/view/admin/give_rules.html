@@ -1,0 +1,67 @@
+<fieldset class="layui-elem-field">
+        <legend>权限分配</legend>
+        <blockquote class="layui-elem-quote">勾选或取消对应的菜单并提交即可</blockquote>   
+
+</fieldset>
+<form class="layui-form">
+  <div class="layui-form-item">
+    <div class="layui-input-block role">
+      {foreach name="rules" as item="v" key="k"}
+          <!-- <div class="layui-input-block"> -->
+          <input type="checkbox" value="{$v['id']}"{if condition="$v['have'] == 1"}  checked {/if} name="rules[{$v.id}]" title="{$v['menu_name']}">
+            {foreach name="v[$v['id']]" as item="vo" }
+              <div class="layui-input-block">
+                <input type="checkbox" value="{$vo['id']}"{if condition="$vo['have'] == 1"}  checked {/if} name="rules[{$vo.id}]" title="{$vo['menu_name']}">
+                    {foreach name="$vo[$vo['id']]" as item="vvo" }
+                        <div class="layui-input-block">
+                            <input type="checkbox" value="{$vvo['id']}"{if condition="$vvo['have'] == 1"}  checked {/if} name="rules[{$vvo.id}]" title="{$vvo['menu_name']}">
+                        </div>
+                    {/foreach}
+              </div>
+            {/foreach}
+          <!-- </div> -->
+          
+      {/foreach}
+    </div>
+    
+    <div class="layui-form-mid layui-word-aux">请勾选菜单权限</div>
+  </div>
+<input type="hidden" name="role_id" value="{$role_id}">
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="addmenu">立即提交</button>
+
+    </div>
+  </div>
+</form>
+
+<script>
+layui.use('form', function(){
+    var form = layui.form,
+         $ = layui.jquery
+      //监听提交
+      form.on('submit(addmenu)', function(data){
+          
+        var info = data.field;
+        var url = "{:url('index/admin/giveRules')}";
+        $.post(url,info,function(data){
+      data = JSON.parse(data)
+            if(data.status == 'error'){
+                  layer.msg(data.msg,{icon: 5});//失败的表情
+                  return;
+              }else if(data.status == 'success'){
+                  layer.msg(data.msg, {
+                      icon: 6,//成功的表情
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                       location.reload();
+                    }); 
+              }
+        })
+        
+        return false;//阻止表单跳转
+      });
+      form.render('checkbox'); 
+    });
+
+</script>

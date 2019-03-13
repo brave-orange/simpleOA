@@ -1,0 +1,27 @@
+<fieldset class="layui-elem-field">
+        <legend>权限列表</legend>
+        <div class="layui-field-box">
+          <table class="layui-table">
+          <thead>
+            <tr>
+              <th>菜单名称</th>
+              <th>路由</th>
+              <th>菜单级别</th>
+            </tr> 
+          </thead>
+          <tbody>
+            {foreach name="rules" as item="vo" key="k"}
+            <tr {if condition="$vo['level'] == '一级菜单'"} style="background-color: #CCFFFF;" {elseif condition="$vo['level'] == '二级菜单'"/} style="background-color: #CCCCFF;"  {/if}>
+              <td>{$vo.menu_name}</td>
+              <td>{$vo.action}</td>
+              <td>{$vo.level}</td>
+            </tr>
+            {/foreach}
+          </tbody>
+        </table>
+        </div>
+</fieldset>
+<script>
+
+
+</script>
