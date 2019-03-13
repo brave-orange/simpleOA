@@ -98,7 +98,7 @@ function financial_log($data,$msg = null){   //存储财务审核日志
 //递归父子级菜单
 function get_conlumns($array){
     if($array!=NULL){
-
+echo 1231;
     }
 }
 //递归父子级菜单    type:1:顺序菜单 2树状菜单
