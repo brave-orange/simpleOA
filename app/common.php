@@ -4,6 +4,7 @@
 // 
 use lib\api_demo\sendFilePsw;
 use lib\api_demo\sendFail;
+use think\Model;
 function json($status,$msg="",$data=array()){
   $result=array(
    'status'=>$status,
@@ -95,12 +96,7 @@ function financial_log($data,$msg = null){   //存储财务审核日志
         if($error) throw new Exception('请求发生错误：' . $error);
         return  $data;
     }
-//递归父子级菜单
-function get_conlumns($array){
-    if($array!=NULL){
-echo 1231;
-    }
-}
+
 //递归父子级菜单    type:1:顺序菜单 2树状菜单
 function get_column($array,$type=1,$fid=0,$level=0)
 {

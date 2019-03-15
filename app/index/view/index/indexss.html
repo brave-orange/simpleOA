@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 	<head>
 		<meta charset="UTF-8">
 		<title>后台管理-WeAdmin Frame型后台管理系统-WeAdmin 1.0</title>
@@ -8,10 +7,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<meta http-equiv="Cache-Control" content="no-siteapp" />
-		<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-		<link rel="stylesheet" href="__STATIC__/statices/css/font.css">
-		<link rel="stylesheet" href="__STATIC__/statices/css/weadmin.css">
-		<script type="text/javascript" src="__STATIC__/lib/layui/layui.js" charset="utf-8"></script>
+		<!--<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />-->
+		<link rel="stylesheet" href="__STATIC__/css/font.css">
+		<link rel="stylesheet" href="__STATIC__/css/weadmin.css">
+		<!--<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>-->
+		<!--<script type="text/javascript" src="__STATIC__/layui/layui.js" charset="utf-8"></script>-->
+		<!--<script type="text/javascript" src="__STATIC__/js/admin.js" charset="utf-8"></script>-->
+		<script type="text/javascript" src="__STATIC__/layui/layui.js" charset="utf-8"></script>
 
 	</head>
 
@@ -19,47 +21,47 @@
 		<!-- 顶部开始 -->
 		<div class="container">
 			<div class="logo">
-				<a href="./index.html">传媒OA系统</a>
+				<a href="./index.html">WeAdmin v1.0</a>
 			</div>
 			<div class="left_open">
 				<i title="展开左侧栏" class="iconfont">&#xe699;</i>
 			</div>
-			<!--<ul class="layui-nav left fast-add" lay-filter="">-->
-				<!--<li class="layui-nav-item">-->
-					<!--<a href="javascript:;">+新增</a>-->
-					<!--<dl class="layui-nav-child">-->
-						<!--&lt;!&ndash; 二级菜单 &ndash;&gt;-->
-						<!--<dd>-->
-							<!--<a onclick="WeAdminShow('资讯','https://www.youfa365.com/')"><i class="iconfont">&#xe6a2;</i>资讯</a>-->
-						<!--</dd>-->
-						<!--<dd>-->
-							<!--<a onclick="WeAdminShow('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a>-->
-						<!--</dd>-->
-						<!--<dd>-->
-							<!--<a onclick="WeAdminShow('用户','https://www.youfa365.com/')"><i class="iconfont">&#xe6b8;</i>用户</a>-->
-						<!--</dd>-->
-					<!--</dl>-->
-				<!--</li>-->
-			<!--</ul>-->
-			<ul class="layui-nav right" lay-filter="">
+			<ul class="layui-nav left fast-add" lay-filter="">
 				<li class="layui-nav-item">
-					<a href="javascript:;">{:session('name')}</a>
+					<a href="javascript:;">+新增</a>
 					<dl class="layui-nav-child">
 						<!-- 二级菜单 -->
-						<!--<dd>-->
-							<!--<a onclick="WeAdminShow('个人信息','http://www.baidu.com')">个人信息</a>-->
-						<!--</dd>-->
 						<dd>
-							<a onclick="WeAdminShow('切换帐号','login')">切换帐号</a>
+							<a onclick="WeAdminShow('资讯','https://www.youfa365.com/')"><i class="iconfont">&#xe6a2;</i>资讯</a>
 						</dd>
 						<dd>
-							<a class="loginout" href="login">退出</a>
+							<a onclick="WeAdminShow('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a>
+						</dd>
+						<dd>
+							<a onclick="WeAdminShow('用户','https://www.youfa365.com/')"><i class="iconfont">&#xe6b8;</i>用户</a>
 						</dd>
 					</dl>
 				</li>
-				<!--<li class="layui-nav-item to-index">-->
-					<!--<a href="/">前台首页</a>-->
-				<!--</li>-->
+			</ul>
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="javascript:;">Admin</a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a onclick="WeAdminShow('个人信息','http://www.baidu.com')">个人信息</a>
+						</dd>
+						<dd>
+							<a onclick="WeAdminShow('切换帐号','./login.html')">切换帐号</a>
+						</dd>
+						<dd>
+							<a class="loginout" href="login.html">退出</a>
+						</dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item to-index">
+					<a href="/">前台首页</a>
+				</li>
 			</ul>
 
 		</div>
@@ -68,7 +70,6 @@
 		<!-- 左侧菜单开始 -->
 		<div class="left-nav">
 			<div id="side-nav">
-
 				<ul id="nav">
 					{foreach name="menus" as item="v" }
 					<li>
@@ -82,7 +83,8 @@
 							<li>
 								<a _href="/{$val['action']}">
 									<span style="display: none;">{$val['id']}</span>
-									<i class="layui-icon"  style="font-size: 25px; color: #1E9FFF;">{$val['icon']}</i>
+									<!--<i class="layui-icon" style="top: 1px; font-size: 18px;">{:html_entity_decode($val['icon'])}</i>-->
+									<i class="iconfont">{:html_entity_decode($val['icon'])}</i>
 									<cite>{$val.menu_name}</cite>
 								</a>
 							</li>
@@ -126,7 +128,7 @@
 //			  var admin = layui.admin;
 //			});
 			layui.config({
-			  base: '__STATIC__/statices/js/'
+			  base: './static/js/'
 			  ,version: '101100'
 			}).use('admin');
 			layui.use(['jquery','admin'], function(){

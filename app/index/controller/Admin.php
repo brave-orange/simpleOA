@@ -32,13 +32,7 @@ class Admin extends CommonController{
         $count = count($res);
         return json_decode(json_encode(['code'=>'0','msg'=>'','count' => $count,'data'=>$res],JSON_UNESCAPED_UNICODE));
     }
-    public function getMenuLists(){//获取所有菜单列表2
-        if(Request::instance()->isPost()){
-            $res=model('Menu')->
-            select();
-            $result=get_conlumns($res);
-        }
-    }
+
     public function getMenuList(){    //获取所有菜单列表
         if (Request::instance()->isPost()){
            
@@ -168,6 +162,10 @@ class Admin extends CommonController{
     public function delMenu(){        //删除菜单
         if (Request::instance()->isPost()){
             $id = input('param.id');
+            $data=$this->deldegui($id);
+           if($data){
+               return json('error','删除失败请先删除子菜单！');
+           }
             $m = model('Menu')
                 ->where(['id'=>$id])
                 ->find();
@@ -179,9 +177,23 @@ class Admin extends CommonController{
 
         }
     }
+//删除递归
+    public function deldegui($id,$del=array()){
+        $z=Db::table('Menu')
+            ->where(['pid'=>$id])
+            ->select();
+        if($z!=NULL){
+            $del=[$id=>$z];
+            foreach($z as $key=>$value){
+               $this->deldegui($value['id'],$del);
+            }
+        }
+            return $del;
+    }
     public function delUser(){  //删除用户
         if (Request::instance()->isPost()){
             $id = input('param.id');
+
             $m = model('Users')
                 ->where(['id'=>$id])
                 ->find();
