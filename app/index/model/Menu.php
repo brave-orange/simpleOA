@@ -3,7 +3,7 @@ namespace app\index\model;
 use think\Model;
 
 class Menu extends Model{
-    protected $table="menu";
+    protected $table="coa_menu";
 
     public function getMenus($ids){
         $menus = $this->where(['id'=>['IN',$ids],'is_menu'=>1])->select();

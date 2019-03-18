@@ -9,7 +9,7 @@ use think\Loader;
 use think\Model;
 use think\Session;
 class AuthRole extends Model{
-    protected $table = 'auth_role';
+    protected $table = 'coa_auth_role';
     
 
 

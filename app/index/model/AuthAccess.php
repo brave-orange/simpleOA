@@ -11,7 +11,7 @@ use think\Loader;
 use think\Model;
 
 class AuthAccess extends Model{
-    protected $table = 'auth_access';
+    protected $table = 'coa_auth_access';
 
     private function getUserMenuArr($uid){
         $rules = $this->alias('a')
