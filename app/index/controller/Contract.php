@@ -21,7 +21,7 @@ class Contract extends CommonController{
     }
     //添加销售合同数据
     public function xadd_data(){
-        return model('service');
+        return model('service','contract');
     }
     //添加采购合同数据
     public function cadd_data(){
