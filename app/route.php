@@ -31,7 +31,7 @@ return [
     ,'contract_sel'         =>      'index/contract/contract_sel'
     ,'cardrecharge'         =>      'index/Yinbiaocard/cardrecharge'
     ,'uploadrecharge'       =>      'index/Yinbiaocard/uploadrecharge'
-    ,'contract_add'         =>      'index/Contract/contract_add'
+    ,'contract_oradd'       =>      'index/Contract/contract_oradd'
     ,'contract_pass'        =>      'index/contract/contract_pass'
     ,'customer_info'        =>      'index/customer/customer_info'
     ,'channel_info'         =>      'index/customer/channel_info'
