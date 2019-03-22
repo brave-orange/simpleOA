@@ -17,36 +17,12 @@ return [
         ':id'   => ['index/hello', ['method' => 'get'], ['id' => '\d+']],
         ':name' => ['index/hello', ['method' => 'post']],
     ],
-    'main'                  =>      'index/index/main'
-    ,'permission_denied'    =>      'index/Error/permissionDenied'
-    ,'permission_denied_post'  =>      'index/Error/permissionDeniedPost'
-    ,'login'                =>      'index/login/login'
-    ,'addpurchase'          =>      'index/Purchase/addPurchase'
-    ,'purchaselist'         =>      'index/Purchase/purchaselist'
-    ,'waitpurchaselist'     =>      'index/Purchase/waitpurchaselist'
-    ,'purchasedList'        =>      'index/Purchase/purchasedList'
-    ,'addyinbiao'           =>      'index/Yinbiaocard/addyinbiao'
-    ,'upload'               =>      'index/Yinbiaocard/upload'
-    ,'customer_list'        =>      'index/customer/customer_list'
-    ,'contract_sel'         =>      'index/contract/contract_sel'
-    ,'cardrecharge'         =>      'index/Yinbiaocard/cardrecharge'
-    ,'uploadrecharge'       =>      'index/Yinbiaocard/uploadrecharge'
-    ,'contract_oradd'       =>      'index/Contract/contract_oradd'
-    ,'contract_pass'        =>      'index/contract/contract_pass'
-    ,'customer_info'        =>      'index/customer/customer_info'
-    ,'channel_info'         =>      'index/customer/channel_info'
-    ,'channel_list'         =>      'index/customer/channel_list'
-    ,'menulist'             =>      'index/admin/menulist'
-    ,'rolelist'             =>      'index/admin/rolelist'
-    ,'userlist'             =>      'index/admin/userlist'
-    ,'pay_log'              =>      'index/contract/pay_log'
-    ,'supplier_list'        =>      'index/purchase/supplier_list'
-    ,'receive_card'         =>      'index/Yinbiaocard/receiveCard'
-    ,'verify_receive'       =>      'index/Yinbiaocard/verifyReceive'
-    ,'my_card'              =>      'index/Yinbiaocard/myCard'
-
-
-
-
-
+    'main'                      =>      'index/index/main'
+    ,'permission_denied'        =>      'index/Error/permissionDenied'
+    ,'permission_denied_post'   =>      'index/Error/permissionDeniedPost'
+    ,'login'                    =>      'index/login/login'
+    ,'logout'                   =>      'index/login/logout'
+    ,'menulist'                 =>      'index/admin/menulist'
+    ,'rolelist'                 =>      'index/admin/rolelist'
+    ,'userlist'                 =>      'index/admin/userlist'
 ];
