@@ -3,7 +3,7 @@ namespace app\index\service;
 use think\Model;
 use think\Request;
 use think\Session;
-
+use think\Db;
 class Contract extends Model{
     //销售合同数据
     public function xadd_data(){
@@ -122,6 +122,71 @@ class Contract extends Model{
             }
         }
     }
+    //采购合同列表数据
+    public function contract_cdata(){
+        if(request()->isPost()){
+            $p=input('param.page');
+            $page=($p-1)*10;
+            $where="";
+            $contract_status=input('param.contract_status');
+            if($contract_status){
+                $where.=" and contract_status=$contract_status";
+            }
+            $name=input('param.name');
+            if($name){
+                $where.=" and business_name=$name";
+            }
+            $time=input('param.sk_time');
+            if($time){
+                $time=explode(' - ',$time);
+                $where.=" and $time[1]>dateofcollection>$time[0]";
+            }
+            $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.cg_contract_id where contract_type='c' $where limit $page,10";
+            $res=Db::query($sql);
+            $count=count($res);
+            return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
+
+        }
+    }
+    //销售合同列表数据
+    public function contract_xdata(){
+        if(request()->isPost()){
+            $p=input('param.page');
+            $page=($p-1)*10;
+            $where="";
+            $contract_status=input('param.contract_status');
+            if($contract_status){
+                $where.=" and contract_status=$contract_status";
+            }
+            $name=input('param.name');
+            if($name){
+                $where.=" and business_name=$name";
+            }
+            $time=input('param.sk_time');
+            if($time){
+                $time=explode(' - ',$time);
+                $where.=" and $time[1]>dateofcollection>$time[0]";
+            }
+            $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.xs_contract_id where contract_type='x' $where limit $page,10";
+            $res=Db::query($sql);
+            foreach($res as $key=>$val){
+                if($res[$key]['contract_status']=='0'){
+                    $res[$key]['contract_status']='未审核';
+                }elseif($res[$key]['contract_status']=='1'){
+                    $res[$key]['contract_status']='已审核';
+                }elseif($res[$key]['contract_status']=='3'){
+                    $res[$key]['contract_status']='已完成';
+                }
+                if($res[$key]['contract_type']=='x'){
+                    $res[$key]['contract_type']='销售合同';
+                }
+            }
+            $count=count($res);
+            return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
+
+        }
+    }
+    //图片回调
     public function images(){
        if(Request::instance()->param(true)){
             if($_FILES){
@@ -139,7 +204,7 @@ class Contract extends Model{
                $data=move_uploaded_file($_FILES[$file]["tmp_name"],
                    ROOT_PATH."public/static/images/" .$file."/". $_FILES[$file]["name"]);
                if($data){
-                   $url="public/static/images/" .$file."/". $_FILES[$file]["name"];
+                   $url=$file."/". $_FILES[$file]["name"];
                    return json('success',$url);
                }else{
                    return json('error','上传文件失败！');

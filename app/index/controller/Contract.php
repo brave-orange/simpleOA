@@ -20,6 +20,22 @@ class Contract extends CommonController{
     public function contract_zadd(){
         return view();
     }
+    //销售合同列表
+    public function contract_xlist(){
+        return view();
+    }
+    //采购合同列表
+    public function contract_clist(){
+        return view();
+    }
+    //销售合同数据
+    public function contract_xdata(){
+        return model('contract','service')->contract_xdata();
+    }
+    //采购合同数据
+    public function contract_cdata(){
+        return model('contract','service')->contract_cdata();
+    }
     //添加销售合同数据
     public function xadd_data(){
         return model('contract','service')->xadd_data();
