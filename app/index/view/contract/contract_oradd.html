@@ -5,10 +5,10 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
-    <script type="text/javascript" src="__STATIC__/layui/layui.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
     <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
     <style>
         .grid-demo{
             padding: 10px;
@@ -25,19 +25,19 @@
     <legend>合同起草</legend>
 </fieldset>
 <div class="layui-row layui-col-space15">
-    <div class="layui-col-md3">
-        <div class="grid-demo xadd">
-            <a href="#" class="layui-btn layui-btn-lg">添加销售合同</a>
+    <div class="layui-col-md3" >
+        <div class="grid-demo xadd" >
+            <a href="#" class="layui-btn layui-btn-lg" style="background-color:#1E9FFF">添加销售合同</a>
         </div>
     </div>
     <div class="layui-col-md3">
-        <div class="grid-demo">
-            <a href="#" class="layui-btn layui-btn-lg">添加采购合同</a>
+        <div class="grid-demo cadd">
+            <a href="#" class="layui-btn layui-btn-lg" style="background-color:#1E9FFF">添加采购合同</a>
         </div>
     </div>
     <div class="layui-col-md3">
-        <div class="grid-demo">
-            <a href="#" class="layui-btn layui-btn-lg">添加直转合同</a>
+        <div class="grid-demo zadd">
+            <a href="#" class="layui-btn layui-btn-lg" style="background-color:#1E9FFF">添加直转合同</a>
         </div>
     </div>
 </div>
@@ -46,11 +46,36 @@
     $('.xadd').click(function () {
         layer.open({
             type: 2,
-            area: ['700px', '450px'],
-            fixed: false, //不固定
-            maxmin: true,
-            content:"{:url('index/contract/contract_xadd')}?contract_id="
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['893px', '550px'],
+            content: "{:url('index/contract/contract_xadd')}"
         });
+
+    })
+    $('.cadd').click(function () {
+        layer.open({
+            type: 2,
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['893px', '550px'],
+            content: "{:url('index/contract/contract_cadd')}"
+        });
+
+    })
+    $('.zadd').click(function () {
+        layer.open({
+            type: 2,
+            title:'添加直转合同基本信息',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['1020px', '548px'],
+            content: "{:url('index/contract/contract_zadd')}"
+        });
+
     })
 </script>
 </body>

@@ -25,4 +25,5 @@ return [
     ,'menulist'                 =>      'index/admin/menulist'
     ,'rolelist'                 =>      'index/admin/rolelist'
     ,'userlist'                 =>      'index/admin/userlist'
+    ,'contract_oradd'           =>      'index/contract/contract_oradd'
 ];

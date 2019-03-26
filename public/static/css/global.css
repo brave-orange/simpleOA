@@ -35,9 +35,9 @@
 .header-demo .layui-nav .layui-nav-item{margin: 0 10px; line-height: 70px;}
 .header-demo .layui-nav .layui-nav-item a{color: #999;}
 .header-demo .layui-nav .layui-this{background-color: #f2f2f2;}
-.header-demo .layui-nav .layui-nav-item a:hover, 
+.header-demo .layui-nav .layui-nav-item a:hover,
 .header-demo .layui-nav .layui-this a{color: #000;}
-.header-demo .layui-nav .layui-this:after, 
+.header-demo .layui-nav .layui-this:after,
 .header-demo .layui-nav-bar{background-color: #393D49;}
 .header-demo .layui-nav .layui-this a{padding: 0 30px;}
 
@@ -164,7 +164,7 @@ body .layui-layer-dir .layui-layer-content{padding: 10px; max-height: 280px; ove
 
 .site-table{width: 100%; margin: 10px 0;}
 .site-table thead{background-color:#f2f2f2; }
-.site-table th, 
+.site-table th,
 .site-table td{padding: 6px 15px; min-height: 20px; line-height: 20px; border:1px solid #ddd; font-size: 14px; font-weight: 400;}
 .site-table tr:nth-child(even){background: #fbfbfb;}
 
@@ -311,72 +311,72 @@ body .site-demo-nav .layui-nav-item{line-height: 40px}
 
 /* 自定义css */
 .admin-nav-tree .layui-nav-child a {
-	padding-left: 30px;
+  padding-left: 30px;
 }
 
 .admin-nav-card{
-	border: 0;
-	margin: 0;
-	box-shadow:none;
+  border: 0;
+  margin: 0;
+  box-shadow:none;
 }
 .admin-nav-card .layui-icon{
-	position: relative;
+  position: relative;
 }
 .admin-nav-card .layui-tab-item iframe{
-	width: 100%;
-	border: 0;
-	height: 100%;
+  width: 100%;
+  border: 0;
+  height: 100%;
 }
 .admin-nav-card .layui-tab-title cite{
-	font-style: normal;
+  font-style: normal;
 }
 
 .admin-header-info{
-	position: absolute;
-    z-index: 19940201;
-    right: 20px;
-    top: 0;
-    color: black;
-    height: 10px;
+  position: absolute;
+  z-index: 19940201;
+  right: 20px;
+  top: 0;
+  color: black;
+  height: 10px;
 }
 .admin-header-info .admin-header-item{
-	float: left;
-    padding: 0 10px;
-    line-height: 70px;
+  float: left;
+  padding: 0 10px;
+  line-height: 70px;
 }
 .admin-header-user{
-	cursor: pointer;
+  cursor: pointer;
 }
 .admin-header-user img{
-	width: 40px; height: 40px; border-radius: 100%;
+  width: 40px; height: 40px; border-radius: 100%;
 }
 .admin-header-user span{
-	padding-left:5px;
+  padding-left:5px;
 }
 .admin-header-user i{
-	position: relative;top: 2px;
+  position: relative;top: 2px;
 }
 .admin-header-dropdown{
-	    position: absolute;
-    top: 64px;
-    background-color: white;
-    min-width: 110px;
-    border: solid 1px #cccccc;
-    border-radius: 3px;
-    padding: 5px 0;
+  position: absolute;
+  top: 64px;
+  background-color: white;
+  min-width: 110px;
+  border: solid 1px #cccccc;
+  border-radius: 3px;
+  padding: 5px 0;
 }
 .admin-header-dropdown .admin-header-dropdown-item{
-	height: 20px;
-    line-height: 20px;
-    padding: 5.5px;
+  height: 20px;
+  line-height: 20px;
+  padding: 5.5px;
 }
 .admin-header-dropdown .admin-header-dropdown-item:hover{
-	background-color: #f2f2f2;
-	cursor: pointer;
+  background-color: #f2f2f2;
+  cursor: pointer;
 }
 .admin-header-dropdown-split{
-	border-bottom: solid 1px #cccccc;
-    margin: 3px;
+  border-bottom: solid 1px #cccccc;
+  margin: 3px;
 }
 
 

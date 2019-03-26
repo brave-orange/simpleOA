@@ -179,7 +179,7 @@ class Admin extends CommonController{
     }
 //删除递归
     public function deldegui($id,$del=array()){
-        $z=Db::table('Menu')
+        $z=Db::name('menu')
             ->where(['pid'=>$id])
             ->select();
         if($z!=NULL){
