@@ -122,6 +122,32 @@ class Contract extends Model{
             }
         }
     }
+    //合同总览数据
+    public function contract_zdata(){
+        if(request()->isPost()){
+            $p=input('param.page');
+            $page=($p-1)*10;
+            $where="";
+            $contract_status=input('param.contract_status');
+            if($contract_status){
+                $where.=" and contract_status=$contract_status";
+            }
+            $name=input('param.name');
+            if($name){
+                $where.=" and business_name=$name";
+            }
+            $time=input('param.sk_time');
+            if($time){
+                $time=explode(' - ',$time);
+                $where.=" and $time[1]>dateofcollection>$time[0]";
+            }
+            $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.cg_contract_id where contract_type='c' $where limit $page,10";
+            $res=Db::query($sql);
+            $count=count($res);
+            return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
+
+        }
+    }
     //采购合同列表数据
     public function contract_cdata(){
         if(request()->isPost()){
