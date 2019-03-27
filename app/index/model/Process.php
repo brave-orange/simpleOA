@@ -12,6 +12,8 @@ class Process extends Model{
         }
         return false;
     }
-
+    public function getAllProcess(){
+        return $this->select();
+    }
 
 }

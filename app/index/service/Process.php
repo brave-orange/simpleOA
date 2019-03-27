@@ -44,22 +44,27 @@ Class Process extends Model{
         }
     }
 
-    public function init_process($data){   //初始化流程节点
+    public function init_process($data_str){   //初始化流程节点
+        $data = json_decode($data_str);
         $count = model('ProcessNode')->count();
         foreach ($data as &$value) {
             $value['node_id'] = "ND-".date("Ymd")."-".(++$count);
         }
-        foreach ($data as $key=>&$value) {
+        foreach ($data as $key=>&$value) {    //建好节点顺序
             if($key == 0){
                 $value['ishead'] = 1;
             }else{
                 $value['ishead'] = 0;
             }
             if($key == count($data)-1){
-
-            }
-            
+                $value['next_node'] = "";
+            }else{
+                $value['next_node'] = $data[$key+1]['nodeid'];
+            }      
         }
+        $res = model("ProcessNode")->savelist($data);
+
+
 
     }
 

@@ -36,27 +36,6 @@ function md6($password){
 }    //密码加密
 
 
-function card_error_log($card_no,$msg = null){   //卡号存储错误计入日志
-    $masg = "";
-    for($i = 0 ; $i < count($card_no) ; $i++){
-        $masg = '['.date("Y-m-d H:i:s").']'.'卡号：'.json_encode($card_no[$i]).$msg;
-
-    }
-            // 日志文件名：日期.txt
-    $path = RUNTIME_PATH.DS.'cardNo_log'. DS .date("Ymd").'.txt';
-    file_put_contents($path, $masg.PHP_EOL,FILE_APPEND);
-}
-
-function financial_log($data,$msg = null){   //存储财务审核日志
-    $masg = '['.date("Y-m-d H:i:s").']        ';
-    foreach ($data as $key => $value) {
-        $masg .= $key.':'.$value."  |  ";
-    }
-            // 日志文件名：日期.txt
-    $path = RUNTIME_PATH.DS.'log'. DS .'financial_log.txt';
-    file_put_contents($path, $masg.PHP_EOL,FILE_APPEND);
-}
-
   /**
      * 发送HTTP请求方法
      * @param  string $url    请求URL
@@ -199,7 +178,6 @@ function number_transf($number){   //数字转换大写
     }
     
     return $integer.$decimal;
-    
 
 }
 
