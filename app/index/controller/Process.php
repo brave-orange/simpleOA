@@ -6,6 +6,7 @@
 namespace app\index\controller;
 use app\common\controller\CommonController;
 use think\Request;
+
 use think\Session;
 class Process extends CommonController{
     public function __construct(){
@@ -45,6 +46,13 @@ class Process extends CommonController{
             $limit = input('param.limit');
             $start = ($page-1)*$limit;
             return model('Process','service')->get_process_list($start,$limit,0);
+        }
+    }
+    public function processChild(){
+        if (Request::instance()->isGet()){
+            return view();
+        }else{
+            
         }
     }
 }

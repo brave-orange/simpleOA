@@ -389,3 +389,37 @@ body .site-demo-nav .layui-nav-item{line-height: 40px}
 
 /**/
 .admin-main {padding: 10px;	margin-bottom: 46px;}
+
+/*flex 布局*/
+.flex-box {
+    display: box;              /* OLD - Android 4.4- */
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    /* 09版 */
+    -webkit-box-orient: horizontal;
+    /* 12版 */
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    -o-flex-direction: row;
+    flex-direction: row;
+}
+.flex-b {
+    /* 09版 */
+    -webkit-box-pack: justify;
+    /* 12版 */
+    -webkit-justify-content: space-between ;
+    -moz-justify-content: space-between ;
+    -ms-justify-content: space-between ;
+    -o-justify-content: space-between ;
+    justify-content: space-between ;
+    /* 其它取值如下：
+      align-items     主轴原点方向对齐
+      flex-end        主轴延伸方向对齐
+      space-between   等间距排列，首尾不留白
+      space-around    等间距排列，首尾留白
+     */
+}

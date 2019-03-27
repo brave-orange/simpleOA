@@ -1,0 +1,156 @@
+<style>
+        /*时间线*/
+    #timeline{padding: 5px;}
+    #process{
+      font-size: 10px;
+      height: 24px;
+    }
+    #process li {
+      float: left;
+      position: relative;
+      list-style: none;
+      margin: 0 20px 12px -15px;
+      border-top: solid 1px skyblue;
+      border-bottom: solid 1px skyblue;
+      padding-left: 12px;
+      padding-right: 1px;
+      line-height: 20px;
+      font-weight: 700
+    }
+    #process li:after, #process li:before {
+      border: 10px solid transparent;
+      border-left: 10px solid #fff;
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      right: -18px;
+      content: ' '
+    }
+    #process li:before {
+      border-left-color: blue;
+      right: -19px;
+    }
+    .timeline{
+      padding-bottom: 5px;
+      padding-left: 15px;
+      border-bottom:1px solid #ccc;
+    }
+  .layui-layer-content{
+    overflow: visible !important;
+  }
+</style>
+
+<!-- 流程图 -->
+<div id="timeline">
+  <div class="timeline flex-box flex-b">
+    <ul id="process">
+      
+    </ul>
+  </div>
+</div>
+
+<form class="layui-form">
+  <div class="layui-form-item">
+      <label class="layui-form-label">名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="nameNode"  placeholder="请输入名称" autocomplete="off" class="layui-input">
+      </div>
+       <div class="layui-form-mid layui-word-aux"></div>
+  </div>  
+  <div class="layui-form-item">
+      <label class="layui-form-label">期限</label>
+      <div class="layui-input-inline">
+        <input type="number" name="timelimit" placeholder="请选择期限" autocomplete="off" class="layui-input">
+      </div>
+       <div class="layui-form-mid layui-word-aux">/天</div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">角色</label>
+      <div class="layui-input-inline">
+      <select name="role" lay-verify="">
+        <option value="0">请选择</option>
+        <option value="1">角色一</option>
+        <option value="2">角色二</option>
+        <option value="3">角色三</option>
+      </select>     
+      </div>
+      <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+<!--   <div class="layui-form-item">
+      <label class="layui-form-label">下一个节点</label>
+      <div class="layui-input-inline">
+      <select name="city2" lay-verify="" value="0571" style="padding-top: 50px">
+        <option value="0">节点一</option>
+        <option value="1">节点二</option>
+        <option value="2">节点三</option>
+        <option value="3">节点四</option>
+        <option value="4">节点五</option>
+        <option value="5">节点六</option>
+        <option value="6">节点七</option>
+      </select>     
+      </div>
+      <div class="layui-form-mid layui-word-aux"></div>
+  </div> -->
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn addNode" lay-submit lay-filter="addNode">添加节点</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button class="layui-btn submitNode" >提交节点</button>
+    </div>
+  </div>    
+</form>
+<script>
+layui.use('form', function(){
+  var form = layui.form,
+       $ = layui.jquery;
+    
+    //提交
+    var nodeArr = [];
+    form.on('submit(addNode)',function(data){
+      
+      var name = data.field.nameNode;
+      var timelimit = data.field.timelimit;
+      var role = data.field.role;
+      var obj = $("#process");
+      
+      var userInfo = JSON.stringify(nodeArr);
+      // console.log(userInfo)
+      var url = "{:url('index/admin/addMenu')}";
+      $.post(url,userInfo,function(data){
+        data = JSON.parse(data)
+        if(data.status == 'error'){
+            layer.msg(data.msg,{icon: 5});//失败的表情
+            return;
+          }else if(data.status == 'success'){
+            showNode(timelimit,name,role,obj);
+            nodeStyle();
+            layer.msg(data.msg, {
+              icon: 6,//成功的表情
+              time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            }, function(){
+               // location.reload();
+            }); 
+          }
+      })
+      return false;
+    })
+    
+    // 节点流程
+    function showNode(timelimit,name,role,obj){
+      obj.append("<li>"+name+"</li>");
+      var nodejson = {};
+      nodejson["timelimit"] = timelimit;
+      nodejson["name"] = name;
+      nodejson["role"] = role;
+      nodeArr.push(nodejson);
+      // console.log(nodeArr)
+    }
+    // 节点样式
+    function nodeStyle(){
+      $("#process>li:even").css("color","orange");
+      $("#process>li:odd").css("color","skyblue");
+    } 
+    form.render(); 
+  });
+</script>
