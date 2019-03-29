@@ -212,6 +212,21 @@ class Contract extends Model{
 
         }
     }
+    //合同商品添加
+    public function goods_data(){
+        if(request()->isPost()){
+            $data=input('param.formdata');
+            $dataobj=json_decode($data,true);
+            if($dataobj['goods_price'] < 0 && $dataobj['goods_price'] ==0){
+                return json('error','请填写正确的商品单价！');
+            }
+            if($dataobj['number'] <0 && $dataobj['number']=='0'){
+                return json('error','请填写正确的商品数量！');
+            }
+            $dataobj['zmoney']=$dataobj['number']*$dataobj['goods_price'];
+            return json_decode(json_encode(['code'=>0,'msg'=>'','data'=>$dataobj],JSON_UNESCAPED_UNICODE));
+        }
+    }
     //图片回调
     public function images(){
        if(Request::instance()->param(true)){
