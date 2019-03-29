@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>商品列表</title>
+		<title>商品规格列表</title>
 		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="__STATIC__/css/global.css" media="all">
 		<link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
@@ -45,37 +45,17 @@
 			
 			<div class="layui-form-item" style="width: 99%;padding: 5px;">
 				<fieldset class="layui-elem-field">
-					<legend>商品列表</legend>
+					<legend>商品规格列表</legend>
 					<div class="layui-field-box">
 						<a href="#" class="layui-btn layui-btn-normal"> <i class="layui-icon">&#xe608;</i> 添加</a>
 					</div>
 					<div >
 						<form class="layui-form searchForm" action="" >
 						  <p>
-						  	<label>商品名称：
+						  	<label>商品规格名称：
 						  	<input type="text" class="searchInfo">
 						  	</label>
-						  	<label>商品品类：
-						  	<input type="text" class="searchInfo" list="data_lei">
-						  	</label>
-						  	<datalist id="data_lei">
-						  		<option value="1">1</option>
-						  	</datalist>
-						  	<label>商品规格：
-						  	<input type="text" class="searchInfo" list="data_gui">
-						  	</label>
-						  	<datalist id="data_gui">
-						  		<option value="2"></option>
-						  		<option value="234"></option>
-						  		<option value="2345"></option>
-						  		<option value="23456"></option>
-						  	</datalist>
-						  	<label>商品厂商：
-						  	<input type="text" class="searchInfo" list="data_chang">
-						  	</label>
-						  	<datalist id="data_chang">
-						  		<option value="2">2</option>
-						  	</datalist>
+						  	
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius search"><i class="layui-icon">&#xe615;</i> 查找</a>
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius reset"><i class="layui-icon">&#xe674;</i> 重置</a>
 						  </p>
@@ -88,17 +68,11 @@
 				    <col width="150">
 				    <col width="150">
 				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
 				  </colgroup>
 				  <thead>
 				    <tr>
-				      <th>商品名称</th>
-				      <th>商品品类</th>
-				      <th>单位</th>
-				      <th>税率</th>
-				      <th>价格计算方式</th>
+				      <th>商品规格编号</th>
+				      <th>商品规格名称</th>
 				      <th>操作</th>
 				    </tr> 
 				  </thead>
@@ -107,16 +81,10 @@
 				      <td>贤心</td>
 				      <td>2016-11-29</td>
 				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
 				    </tr>
 				    <tr>
 				      <td>许闲心</td>
 				      <td>2016-11-28</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
 				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
 				    </tr>
 				  </tbody>
