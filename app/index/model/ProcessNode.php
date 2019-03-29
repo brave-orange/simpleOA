@@ -6,7 +6,7 @@ class ProcessNode extends Model{
     protected $table="coa_process_node";
     public function insert($data){
          if($data){
-            if($this->save($data)){
+            if($this->isUpdate(false)->save($data)){
                 return true;
             }
         }
@@ -16,12 +16,18 @@ class ProcessNode extends Model{
 
     }
 
+
     public function savelist($data){
-        if($data){
-            if($this->saveAll($data)){
-                return true;
+        $error = array();
+        foreach ($data as $value) {
+            if(!$this->insert($value)){
+                $error[] = $value;
             }
         }
-        return false;
+        if(count($error)){
+            return json("error","部分数据存储失败！",$error);
+        }else{
+            return json("success","存储成功!");
+        }
     }
 }

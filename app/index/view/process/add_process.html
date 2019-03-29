@@ -61,7 +61,7 @@
 			</blockquote>
 			<div class="layui-form-item" style="width: 99%">
 			<fieldset class="layui-elem-field">
-				<legend>菜单列表</legend>
+				<legend>未初始化流程列表</legend>
 				<div class="layui-field-box">
 				
 			    <table class="layui-hide" id="menulist" lay-filter="bar"></table>
@@ -92,14 +92,14 @@
 		    	$("#process>li:odd").css("color","skyblue");
 				table.render({
 				    elem: '#menulist'
-				    ,url:"{:url('index/admin/getMenuList')}"
+				    ,url:"{:url('index/process/getprocesslist_unavailable')}"
 				    ,page:false
 				    ,method:'post'
 				    ,cols: [[
-				       {field:'id', hide:false,width:80, title: 'ID'}
-				      ,{field:'menu_name',minWidth:80, title: '菜单名称'}
-				      ,{field:'action', align:'center', minWidth:80, title: '路由地址'}
-				      ,{field:'level', align:'center',sort:true, minWidth:80, title: '菜单级别'}
+				       {field:'process_id', hide:false,minWidth:80, title: '流程ID'}
+				      ,{field:'process_name',minWidth:80, title: '流程名称'}
+				      ,{field:'creator', align:'center', minWidth:80, title: '创建人'}
+				      ,{field:'create_time', align:'center',sort:true, minWidth:80, title: '创建时间'}
 				      ,{fixed: 'right', align:'center',minWidth: 300, title:'管理',align:'center', toolbar: '#barDemo'}
 				    ]]
 				  ,even: true //开启隔行背景
@@ -112,21 +112,19 @@
 				    var tr = obj.tr; 
 				    if(layEvent === 'add'){ //打开添加菜单对话框
 				    	layer.load(); //loadings
-				    	var id = data.id;
-				    	var level = data.level;
-						openadd(id,level);
-						
+				    	var id = data.process_id;
+						openadd(id);
 				    }
-				    if(layEvent === 'del'){ //打开添加菜单对话框
+				    if(layEvent === 'del'){ //
 				    	layer.load(); //loadings
-				    	var id = data.id
-				    	var url = "{:url('index/admin/delMenu')}"
+				    	var process_id = data.process_id
+				    	var url = "{:url('index/process/delProcess')}"
 						layer.confirm('确定删除吗?', {
 						  icon: 3,
 						  skin: 'layer-ext-moon',
 						  btn: ['确认','取消'] //按钮
 						}, function(){
-							$.post(url,{id:id},function(data){
+							$.post(url,{process_id:process_id},function(data){
 								data = JSON.parse(data);
 								if(data.status == 'error'){
 									  layer.msg(data.msg,{icon: 5});//失败的表情
@@ -172,13 +170,14 @@
 						// })
 				  //   }
 				})
-				/*新建流程节点*/
+				/*新建流程*/
 				$('.add').click(function(){  
 					layer.load(); //loadings
 					// $("#add_process").show();
 					initProcess();
 					form.on('submit(add_newNode)', function(data){
 				 		var userInfo = data.field;
+				 		var url = "{:url('index/process/addProcess')}"
 				 		$.post(url,userInfo,function(data){
 				 			data = JSON.parse(data);
 					 		if(data.status == 'error'){
@@ -202,7 +201,7 @@
 				
 
 			})
-			// 初始化流程(新建流程)
+			// 初始化流程(初始化流程节点)
 			function initProcess(){
 				layer.open({
 					title:'新建流程',
@@ -213,40 +212,27 @@
 					scrollbar:true
 				});
 			}
-			
-				 
-			
-				
-				function openadd(id , level){
-					if(level === "三级操作"){
-						layer.msg("不能再创建子菜单啦！！！",{icon: 5});
-						layer.closeAll('loading'); //关闭loading
-						return;
-					}else{
-						var url = "/processChild";
-							$.get(url,function(data){
-								if(data.status == 'error'){
-									layer.msg(data.msg,{icon: 5});
-									return;
-								}
-								
-								layer.open({
-									  title:'编辑流程节点',
-									  type: 1,
-									  skin: 'layui-layer-rim', //加上边框
-									  area: ['600px','80%'], //宽高
-									  content: data,
-									  scrollbar:true
-									 
-								});
-								
-							})
-							layer.closeAll('loading'); //关闭loading
+		    function openadd(id){
+			    var url = "/processChild";
+				$.get(url,{process_id:id},function(data){
+					if(data.status == 'error'){
+					layer.msg(data.msg,{icon: 5});
+					return;
 					}
-
-
 					
-				}
+					layer.open({
+					  title:'编辑流程节点',
+					  type: 1,
+   						  skin: 'layui-layer-rim', //加上边框
+					  area: ['600px','80%'], //宽高
+						  content: data,
+						  scrollbar:true
+						 
+					});
+					
+				})
+				layer.closeAll('loading'); //关闭loading
+			}
 </script>
 
 
@@ -261,13 +247,20 @@
 		<div class="layui-form-item">
 		      <label class="layui-form-label">名称</label>
 		      <div class="layui-input-inline">
-		        <input type="text" name="nodename"  placeholder="请输入名称" autocomplete="off" class="layui-input">
+		        <input type="text" name="process_name"  placeholder="请输入名称" autocomplete="off" class="layui-input">
 		      </div>
 		    <div class="layui-form-mid layui-word-aux"></div>
-		</div> 
+		</div>
+		<div class="layui-form-item">
+		      <label class="layui-form-label">模板表单内容</label>
+		      <div class="layui-input-inline">
+		        <input type="text" name="form_content"  placeholder="请输入" autocomplete="off" class="layui-input">
+		      </div>
+		    <div class="layui-form-mid layui-word-aux"></div>
+		</div>  
 		 <div class="layui-form-item">
 		    <div class="layui-input-block">
-		      <button class="layui-btn"  lay-submit lay-filter="add_newNode" >新建节点</button>
+		      <button class="layui-btn"  lay-submit lay-filter="add_newNode" >新建流程</button>
 		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		    </div>
 		 </div> 

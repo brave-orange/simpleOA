@@ -5,36 +5,38 @@ use think\Model;
 use think\Request;
 use think\Session;
 Class Process extends Model{
-    public function insert_node($data){    //插入节点
+    public function insert_node($data_str){    //插入节点
+        $data = json_decode($data_str,true);
         $count = model('ProcessNode')->count();
-        $data['node_id'] = "ND-".date("Ymd")."-".($count+1);
+        $data['nodeid'] = "ND-".date("Ymd")."-".($count+1);
         $nextnode = model('ProcessNode')->get($data['next_node']);    //待插入节点的下级节点
-        $lastnode = model('ProcessNode')->where(['next_node' => $targetnode['nodeid']])->find();  //待插入节点的上级节点
+        $lastnode = model('ProcessNode')->where(['next_node' => $nextnode['nodeid']])->find();  //待插入节点的上级节点
         if($data['next_node']){
             if($nextnode['ishead']){     //新插入的节点变为头结点
                 $data['ishead'] = 1;
-                $nextnode = 0;
+                $nextnode['ishead']  = 0;
             }else{
                 $data['ishead'] = 0;
+                $lastnode['next_node'] = $data["nodeid"];
+                $lastnode->save();
             }
-            $lastnode['next_node'] = $data['node_id'];
-            $lastnode->save();
+
         }else{
             $finalnode = model('ProcessNode')->where(['next_node' => ""])->find();  //流程尾部节点
-            $finalnode['next_node'] = $data['node_id'];
+            $finalnode['next_node'] = $data['nodeid'];
+            $finalnode->save();
         }
         $r = model('ProcessNode')->insert($data);
         if(!$r){
-            return json('error','出现问题了！');
+            return false;
         }else{
             $nextnode->save();
-            $lastnode->save();
-            $finalnode->save();
-            return json('success','添加成功');
+            
+            return $data;
         }
     }
 
-    public function add_process(){   //新增流程
+    public function add_process($data){   //新增流程
         $count = model('Process')->count();
         $data['process_id'] = "PR-".date("Ymd")."-".($count+1);
         if(model('Process')->insert($data)){
@@ -45,10 +47,12 @@ Class Process extends Model{
     }
 
     public function init_process($data_str){   //初始化流程节点
-        $data = json_decode($data_str);
+        $data = json_decode($data_str,true);
         $count = model('ProcessNode')->count();
-        foreach ($data as &$value) {
-            $value['node_id'] = "ND-".date("Ymd")."-".(++$count);
+
+        foreach ($data as &$value) {   //生成ID
+            $value['nodeid'] = "ND-".date("Ymd")."-".(++$count);
+            $value['create_date'] = date("Y-m-d");
         }
         foreach ($data as $key=>&$value) {    //建好节点顺序
             if($key == 0){
@@ -63,19 +67,40 @@ Class Process extends Model{
             }      
         }
         $res = model("ProcessNode")->savelist($data);
+        if($res){
+            $p = model("Process")->where(["process_id"=>$data[0]["processid"]])->find();
+            $p["status"] = 1;
+            $p->save();
+        }
+        return $res;
+    }
 
-
-
+    public function del_process($pid){
+        return model("Process")->del_process($pid);
     }
 
     public function get_process_list($start,$limit,$status){    //获取所有流程
         $data = model('process')
             ->where(['status'=>$status])
-            ->limit($start,$limit)
+            ->limit($start.','.$limit)
             ->select();
         $count = model('process')->where(['status'=>$status])->count();
         return json_decode(json_encode(['code'=>'0','msg'=>'','count' => $count,'data'=>$data],JSON_UNESCAPED_UNICODE));
+    }
 
+    public function get_process_nodes($process_id){
+        $nodes = [];
+        $res = model("ProcessNode")->where(["processid"=>$process_id,"ishead"=>1])->find();
+        $res["opera_person_name"] = model("AuthRole")->where(['id'=>$res["opera_person"]])->find()["name"];
+        $nodes[] = $res;
+        do{
+            $res = model("ProcessNode")->where(["nodeid"=>$res["next_node"]])->find();
+            $res["opera_person_name"] = model("AuthRole")->where(['id'=>$res["opera_person"]])->find()["name"];
+            $nodes[] = $res;
+
+        }while ($res["next_node"] != "");
+        
+        return $nodes;
     }
 
 }
