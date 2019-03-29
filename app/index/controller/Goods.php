@@ -9,9 +9,23 @@ class Goods extends CommonController
 	public function goods_list(){
 		return view();
 	}
+
 	//商品添加
 	public function goods_add(){
 	    return view();
     }
+
+    //商品规格添加
+	public function goods_specifications(){
+		return view();
+	}
+    //商品种类添加
+	public function goods_category(){
+		return view();
+	}
+	//商品厂商添加
+	public function goods_manufacturer(){
+		return view();
+	}
 
 }
