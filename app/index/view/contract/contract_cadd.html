@@ -32,22 +32,17 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品名称</label>
             <div class="layui-input-inline">
-                <select name="goods" lay-verify="">
+                <select id="goods" name="goods" lay-verify="required" lay-search="">
                     <option value="0">商品0</option>
                     <option value="6">商品1</option>
                     <option value="7">商品2</option>
-                    <option value="8">商品3</option>
                 </select>
             </div>
             <label class="layui-form-label">商品种类</label>
             <div class="layui-input-inline">
-                <select name="goods" lay-verify="">
-                    <!--{foreach :model('contract','model')->sanlist() as $key=>$vo}-->
+                <select id="goods_type" name="goods_type" lay-verify="required" lay-search="">
                     {foreach :model('goods','service')->goods_type() as $key=>$val}
                     <option value="{$val.goods_type_id}">{$val.goods_type}</option>
-                    <!--<option value="6">商品1</option>-->
-                    <!--<option value="7">商品2</option>-->
-                    <!--<option value="8">商品3</option>-->
                     {/foreach}
                 </select>
             </div>
@@ -56,7 +51,7 @@
         <div class="layui-form-item">
         <label class="layui-form-label">商品型号</label>
         <div class="layui-input-inline">
-            <select name="goods" lay-verify="">
+            <select id="norms_name" name="norms_name" lay-verify="">
                 <option value="0">商品0</option>
                 <option value="6">商品1</option>
                 <option value="7">商品2</option>
@@ -65,7 +60,7 @@
         </div>
             <label class="layui-form-label">商品产地</label>
             <div class="layui-input-inline">
-                <select name="goods" lay-verify="">
+                <select id="manufacturer" name="manufacturer" lay-verify="">
                     <option value="0">商品0</option>
                     <option value="6">商品1</option>
                     <option value="7">商品2</option>
@@ -76,7 +71,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品单价</label>
             <div class="layui-input-inline">
-                <input type="number" name="price" placeholder="请填写单价" autocomplete="off" class="layui-input">
+                <input type="number" name="price" placeholder="请填写单价" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">/<span>元</span></div>
         </div>
@@ -87,7 +82,9 @@
             </div>
             <label class="layui-form-label">计量单位</label>
             <div class="layui-input-inline">
-                <input type="number" name="num" required  lay-verify="required" placeholder="请输入单位" autocomplete="off" class="layui-input">
+                <select name="unit" lay-verify="required" lay-search="">
+                    <option value="8">商品3</option>
+                </select>
             </div>
         </div>
         <!--</form>-->
@@ -183,12 +180,61 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
+    $(document).ready(function (e) {
+        goods_type();
+        norms_type();
+        manufacturer();
+        $("#goods").change(function () {
+            goods_type();
+            norms_type();
+            manufacturer();
+        })
+    })
+    function goods_type(){
+        var goods=$("#goods").find('option:selected').html();
+        $.ajax({
+            url:'{:url("index/goods/type_join")}',
+            method:'post',
+            data:{goods:goods},
+            success:function(res){
+                if(res){
+                    norms_type();
+                }
+            }
+        })
+    }
+    function norms_type(){
+        var goods=$("#goods").find('option:selected').html();
+        $.ajax({
+            url:'{:url("index/goods/type_join")}',
+            method:'post',
+            data:{goods_type:goods},
+            success:function(res){
+                if(res){
+
+                }
+            }
+        })
+    }
+    function manufacturer(){
+        var goods=$("#goods").find('option:selected').html();
+        $.ajax({
+            url:'{:url("index/goods/type_join")}',
+            method:'post',
+            data:{goods_type:goods},
+            success:function(res){
+                if(res){
+
+                }
+            }
+        })
+    }
     $('#layuipro').click(function () {
         layer.open({
             type: 1
             ,closeBtn: 2
             ,shadeClose: true
-            ,offset: 'auto'
+            ,offset: ['55px', '90px']
             ,anim: 1
             ,area: ['80%', '80%']
             ,btn:['确定','取消']
@@ -197,9 +243,20 @@
             ,btnAlign: 'c'
             ,moveType: 1 //拖拽模式，0或者1
             ,content: $("#goodsInfo")
-
             ,yes:function () {
-                alert(111);
+                var goods=$("#goods").find('option:selected').html();
+                var goods_type=$("#goods_type").find('option:selected').html();
+                var norms_name=$("#norms_name").find('optin:selected').html();
+                var manufacturer=$("#manufacturer").find('optin:selected').html();
+                var price=$("input[name='price']").val();
+                var num=$("input[name='num']").val();
+                var unit=$("input[name='unit']").val();
+//                if(goods && goods_type && price && num && unit){
+//                    console.log(goods);
+//                    layer.msg('请填写必选项！');
+//                }else{
+//                    console.log(goods);
+//                }
             }
 
         });

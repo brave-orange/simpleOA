@@ -27,5 +27,12 @@ class Goods extends CommonController
 	public function goods_manufacturer(){
 		return view();
 	}
-
+    //商品联动
+    public function type_join(){
+	    return model('goods','service')->type_join();
+    }
+    //商品类别联动
+    public function join_type(){
+        return model('goods','service')->join_type();
+    }
 }
