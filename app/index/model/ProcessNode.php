@@ -30,4 +30,8 @@ class ProcessNode extends Model{
             return json("success","存储成功!");
         }
     }
+
+    public function deleteProcessNodes($processid){
+        return $this->where(['processid'=>$processid])->delete();
+    }
 }

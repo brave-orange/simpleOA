@@ -37,7 +37,7 @@ Class Process extends Model{
     }
 
     public function add_process($data){   //新增流程
-        $count = model('Process')->count();
+        $count = model('Process')->where("create_time",">",date("Y-m-d 00:00:00"))->count();
         $data['process_id'] = "PR-".date("Ymd")."-".($count+1);
         if(model('Process')->insert($data)){
             return json('success','添加成功');
@@ -48,7 +48,7 @@ Class Process extends Model{
 
     public function init_process($data_str){   //初始化流程节点
         $data = json_decode($data_str,true);
-        $count = model('ProcessNode')->count();
+        $count = model('ProcessNode')->where("create_date",">",date("Y-m-d 00:00:00"))->count();
 
         foreach ($data as &$value) {   //生成ID
             $value['nodeid'] = "ND-".date("Ymd")."-".(++$count);
@@ -76,7 +76,18 @@ Class Process extends Model{
     }
 
     public function del_process($pid){
-        return model("Process")->del_process($pid);
+        $ststus = model("Process")->where(["process_id"=>$pid])->find();
+        if($status){
+            return model("Process")->del_process($pid);
+        }else{
+            if(model("Process")->del_process($pid)){
+                return model("ProcessNode")->deleteProcessNodes($pid);
+            }else{
+                return false;
+            }
+            
+        }
+        
     }
 
     public function get_process_list($start,$limit,$status){    //获取所有流程
