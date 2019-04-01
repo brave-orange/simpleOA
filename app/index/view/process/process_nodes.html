@@ -1,0 +1,42 @@
+<fieldset class="layui-elem-field">
+        <legend>流程节点流转情况</legend>
+        <div class="layui-field-box">
+          <table class="layui-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>流程节点名称</th>
+              <th>节点ID</th>
+              <th>限制时间</th>
+              <th>下一操作节点</th>
+              <th>操作角色</th>
+            </tr> 
+          </thead>
+          <tbody>
+            {foreach name="nodes" as item="vo" key="k"}
+            <tr {if condition="$vo['ishead'] == 1"} style="background-color: #CCFFFF;"{/if}>
+              <td>{$k+1}</td>
+              <td>{$vo.node_name}</td>
+              <td>{$vo.nodeid}</td>
+              <td>{$vo.limit_time}</td>
+              {if condition="$vo['next_node'] != ''"} 
+              {foreach name="nodes" as item="v1" key="k1"}
+                {if condition="$vo['next_node'] == $v1['nodeid']"} 
+                <td>{$v1.node_name}</td>
+                {/if}
+              {/foreach}
+              {else /}
+                <td>/</td>
+              {/if}
+              <td>{$vo.opera_person_name}</td>
+              
+            </tr>
+            {/foreach}
+          </tbody>
+        </table>
+        </div>
+</fieldset>
+<script>
+
+
+</script>

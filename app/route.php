@@ -28,4 +28,7 @@ return [
     ,'contract_oradd'           =>      'index/contract/contract_oradd'
     ,'addprocess'           =>      'index/process/addProcess'
     ,'processchild'           =>      'index/process/processChild'
+    ,'editprocess'           =>      'index/process/editProcess'
+    ,'addNode'           =>      'index/process/addNode'
+    ,'processNodes'           =>      'index/process/processNodes'
 ];

@@ -17,4 +17,7 @@ Class Auth extends Model
     public function giveUserRole($userid,$roleid){
         return model('AuthAccess')->addAccess($uid,$role_id);
     }
+    public function getAllroles(){
+        return model("AuthRole")->select();
+    }
 }

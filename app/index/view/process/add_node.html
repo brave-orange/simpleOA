@@ -45,7 +45,9 @@
 <div id="timeline">
   <div class="timeline flex-box flex-b">
     <ul id="process">
-      
+      {volist name="nodes" id="vo"}
+        <li id="{$vo.nodeid}">{$vo.node_name}</li>
+      {/volist}
     </ul>
   </div>
 </div>
@@ -78,30 +80,29 @@
       </div>
       <div class="layui-form-mid layui-word-aux"></div>
   </div>
-<!--   <div class="layui-form-item">
+  <div class="layui-form-item">
       <label class="layui-form-label">下一个节点</label>
       <div class="layui-input-inline">
-      <select name="city2" lay-verify="" value="0571" style="padding-top: 50px">
-        <option value="0">节点一</option>
-        <option value="1">节点二</option>
-        <option value="2">节点三</option>
-        <option value="3">节点四</option>
-        <option value="4">节点五</option>
-        <option value="5">节点六</option>
-        <option value="6">节点七</option>
+      <select name="next_node" id="next_node" lay-verify="" value="0571"  class="layui-input" style="padding-top: 50px">
+        <option value="last">最后节点</option>
+        {volist name="nodes" id="vo"}
+            <option value="{$vo.nodeid}">{$vo.node_name}</option>
+        {/volist}
       </select>     
       </div>
       <div class="layui-form-mid layui-word-aux"></div>
-  </div> -->
+  </div>
+
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button type="button" class="layui-btn addNode">添加节点</button>
+      <button type="button" class="layui-btn addNode">增加节点</button>
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-      <button type="button" class="layui-btn submitNode" >提交所有节点</button>
     </div>
   </div>    
 </form>
 <script>
+$("#process>li:even").css("color","orange");
+$("#process>li:odd").css("color","skyblue");
 layui.use('form', function(){
   var form = layui.form,
        $ = layui.jquery;
@@ -115,7 +116,6 @@ layui.use('form', function(){
         if(typeof($(this).attr('name')) != "undefined"){
           if($(this).val() == ""){
              layer.msg("必填项不可为空！",{icon: 5});//失败的表情
-             console.log($(this).attr('name'))
              status = 0
              return false
           }
@@ -123,56 +123,69 @@ layui.use('form', function(){
         }
       })
       if(status){
-        var obj = $("#process");
-        console.log(data)
-        showNode(data,obj)
-        nodeStyle();
+        //插入数据库
+        var url = "{:url('index/process/addNode')}"
+        $.post(url,{data:JSON.stringify(data)},function(res){
+            res = JSON.parse(res)
+            if(res.status == 'error'){
+                layer.msg(res.msg,{icon: 5});//失败的表情
+                return;
+            }else if(res.status == 'success'){
+              data["nodeid"] = res.data.nodeid
+              $("#next_node").append("<option value="+res.data.nodeid+">"+res.data.node_name+"</option>");
+              var obj = $("#process");
+              showNode(data,obj)
+              nodeStyle();
+              layer.msg(res.msg, {
+                icon: 6,//成功的表情
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+              },function(){
+                form.render();
+              }) 
+            }
+            
+        })
+        
         $('#nodeform').find('.layui-input').each(function(){
           if($(this).attr('name')!= "processid"){
             $(this).val("")
           }
           
         })
+        form.render();
       }else{
         return false
       }
       
     })
-    $('.submitNode').on("click",function(data){
-      if(nodeArr.length == 0){
-          layer.msg("还没有添加审核节点呢！",{icon: 5});//失败的表情
-          return;
-      }
-     layer.confirm('确定添加这些审核节点吗?', {
-              icon: 3,
-              skin: 'layer-ext-moon',
-              btn: ['确认','取消'] //按钮
-            }, function(){
-              var nodeInfo = JSON.stringify(nodeArr);
-              var url = "{:url('index/process/init_process')}"
-              $.post(url,{node_list:nodeInfo},function(data){
-                data = JSON.parse(data)
-                if(data.status == 'error'){
-                    layer.msg(data.msg,{icon: 5});//失败的表情
-                    return;
-                  }else if(data.status == 'success'){
-                    nodeArr = []
-                    layer.msg(data.msg, {
-                      icon: 6,//成功的表情
-                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                    }, function(){
-                       location.reload();
-                    }); 
-                  }
-              })
-            },function(){
-              return
-            })
-    })
+
     // 节点流程
     function showNode(data,obj){
-      obj.append("<li>"+data.node_name+"</li>");
-      nodeArr.push(data);
+      if(data["next_node"] != "last"){
+        var temp = []
+        obj.find('li').each(function(){
+          temp.push([$(this).attr("id"),$(this).html()])
+        })
+        obj.empty();
+        for (var i = 0 ; i < temp.length ; i++) {
+          if(data["next_node"] == temp[i][0]){
+            for (var j = temp.length-1; j >=i ; j--) {
+              temp[j+1] = temp[j];
+            }
+            temp[i] = [data.nodeid,data.node_name];
+            break;
+          }
+        }
+        for (var i = 0; i< temp.length ; i++) {
+
+            obj.append("<li id='"+temp[i][0]+"''>"+temp[i][1]+"</li>");
+        }
+        nodeStyle()
+      }else{
+        obj.append("<li id='"+data.nodeid+"'>"+data.node_name+"</li>");
+      }
+      
+      //nodeArr.push(data);
     }
     // 节点样式
     function nodeStyle(){
