@@ -9,31 +9,10 @@
 		<script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
 		<script src="__STATIC__/layui/layui.js"></script>
 		<style>
-			.searchInfo{
-			  max-width: 120px;
-			  padding:5px;
-			  line-height: 20px;
-			  border-radius: 5px;
-			  border: 1px solid #999;
+			.layui-input{
+				padding: 1px 5px !important;
+				height: 30px;
 			}
-			
-			/*去除input后面的下拉图标*/
-			input::-webkit-calendar-picker-indicator{
-				display: none;
-				-webkit-appearance: none;
-			}
-			
-			.searchForm label:not(:first-child)::after{
-				display: inline-block;
-			    border: 5px solid transparent;
-			    border-top-color: #53ACE8;
-			    content: "";
-			    position: relative;
-			    left: -20px;
-			    vertical-align: middle;
-			}
-			
-			
 			.search:active,.reset:active{
 				transform: scale(0.88)
 			}
@@ -80,39 +59,42 @@
 		<div class="admin-main">
 		<!-- 商品列表 -->
 			
-			<div class="layui-form-item" style="width: 99%;padding: 5px;">
+			<div class="" style="width: 99%;padding: 5px;">
 				<fieldset class="layui-elem-field">
 					<legend>商品列表</legend>
-					<div class="layui-field-box goods_add">
-						<a href="#" class="layui-btn layui-btn-normal"> <i class="layui-icon">&#xe608;</i> 添加</a>
+					<div class="layui-field-box ">
+						<a href="#" class="layui-btn layui-btn-normal goods_add"> <i class="layui-icon">&#xe608;</i> 添加</a>
 					</div>
 					<div >
-						<form class="layui-form searchForm" action="" >
-						  <p>
+						<form class="layui-form" action="" >
+						  <p style="display: flex;justify-content: space-between;align-items: center;">
 						  	<label>商品名称：
-						  	<input type="text" class="searchInfo">
+						  		<input type="text" class="layui-input searchInfo">
 						  	</label>
 						  	<label>商品品类：
-						  	<input type="text" class="searchInfo" list="data_lei">
+							  	<select name="city" lay-verify="" lay-search>
+								  <option value="010">layer</option>
+								  <option value="021">form</option>
+								  <option value="0571" selected>layim</option>
+								</select>   
 						  	</label>
-						  	<datalist id="data_lei">
-						  		<option value="1">1</option>
-						  	</datalist>
+						  	
 						  	<label>商品规格：
-						  	<input type="text" class="searchInfo" list="data_gui">
+						  		<select name="city" lay-verify="" lay-search>
+								  <option value="010">layer</option>
+								  <option value="021">form</option>
+								  <option value="0571" selected>layim</option>
+								</select>
 						  	</label>
-						  	<datalist id="data_gui">
-						  		<option value="2"></option>
-						  		<option value="234"></option>
-						  		<option value="2345"></option>
-						  		<option value="23456"></option>
-						  	</datalist>
+						  	
 						  	<label>商品厂商：
-						  	<input type="text" class="searchInfo" list="data_chang">
+						  		<select name="city" lay-verify="" lay-search>
+								  <option value="010">layer</option>
+								  <option value="021">form</option>
+								  <option value="0571" selected>layim</option>
+								</select>
 						  	</label>
-						  	<datalist id="data_chang">
-						  		<option value="2">2</option>
-						  	</datalist>
+						  	
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius search"><i class="layui-icon">&#xe615;</i> 查找</a>
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius reset"><i class="layui-icon">&#xe674;</i> 重置</a>
 						  </p>
@@ -209,7 +191,11 @@
 
             })
 
-
+            layui.use(['element','form'],function(){
+ 				var form = layui.form;
+            	var element = layui.element;
+            	form.render("select");
+            })
 		</script>
 	</body>
 

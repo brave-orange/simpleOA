@@ -8,28 +8,10 @@
 		<link rel="stylesheet" href="__STATIC__/css/global.css" media="all">
 		<link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
 		<style>
-			.searchInfo{
-			  max-width: 120px;
-			  padding:5px;
-			  line-height: 20px;
-			  border-radius: 5px;
-			  border: 1px solid #999;
-			}
-			
-			/*去除input后面的下拉图标*/
-			input::-webkit-calendar-picker-indicator{
-				display: none;
-				-webkit-appearance: none;
-			}
-			
-			.searchForm label:not(:first-child)::after{
+			.layui-input{
+				padding: 1px 5px !important;
+				height: 30px;width: 200px;
 				display: inline-block;
-			    border: 5px solid transparent;
-			    border-top-color: #53ACE8;
-			    content: "";
-			    position: relative;
-			    left: -20px;
-			    vertical-align: middle;
 			}
 			
 			
@@ -51,11 +33,10 @@
 					</div>
 					<div >
 						<form class="layui-form searchForm" action="" >
-						  <p>
-						  	<label>商品规格名称：
-						  	<input type="text" class="searchInfo">
-						  	</label>
-						  	
+						  <p style="margin: 10px;">
+						  	商品规格名称：
+						  		
+						  	<input type="text" class="layui-input searchInfo">
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius search"><i class="layui-icon">&#xe615;</i> 查找</a>
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius reset"><i class="layui-icon">&#xe674;</i> 重置</a>
 						  </p>
