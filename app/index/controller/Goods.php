@@ -9,10 +9,13 @@ class Goods extends CommonController
 	public function goods_list(){
 		return view();
 	}
-
+    //商品列表数据
+    public function list_data(){
+	    return model('goods','service')->list_data();
+    }
 	//商品添加
 	public function goods_add(){
-	    return view();
+	    return model('goods','service')->goods_add();
     }
 
     //商品规格添加

@@ -21,7 +21,7 @@ class Contract extends CommonController{
         return view();
     }
     //销售合同列表
-    public function contract_xlist(){
+    public function contract_cx(){
         return view();
     }
     //采购合同列表

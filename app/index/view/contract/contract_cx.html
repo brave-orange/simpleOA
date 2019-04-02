@@ -37,26 +37,30 @@
                 <!--</dv>i-->
                 <label class="layui-form-label">客户查询</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" style="width:198px" name="k_name">
+                    <input type="text" class="layui-input" style="width:198px" name="xk_name">
                 </div>
                 <label class="layui-form-label" style="width:88px">收款时间查询</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="time" class="layui-input" style="width:198px" id="test5">
+                    <input type="text" class="layui-input" style="width:198px" id="s_time">
                 </div>
-                <label class="layui-form-label" id="customer_label" >合同状态</label>
-                <div class="layui-input-inline" id="customer_div" >
-                    <select lay-filter="customer" id="customer" name="contract_status">
+                <!--id="customer_label"-->
+                <label class="layui-form-label" >合同状态</label>
+                <!--id="customer_div"-->
+                <div class="layui-input-inline"  >
+                    <!--id="customer"-->
+                    <select lay-filter="customer" name="contract_status">
                         <option value="" selected>请选择</option>
                         <option value="0">未审核</option>
                         <option value="1">已审核</option>
                         <option value="2">已完成</option>
                     </select>
                 </div>
-                <button type="button" class="layui-btn buttonsel" data-type="reload">搜索</button>
+                <button type="button" class="layui-btn x_buttonsel" data-type="reload">搜索</button>
             </div>
-            <table class="layui-hide" id="test" lay-filter="tooler"></table>
+            <table class="layui-hide" id="tooler1" lay-filter="tooler"></table>
+            <input type="hidden" name="sk_time">
         </form>
-        <table id="demo" lay-filter="test"></table>
+        <table id="x_table" lay-filter="test"></table>
     </div>
     <!-- 采购合同列表 -->
     <div class="layui-tab-item">
@@ -71,11 +75,11 @@
                 <!--</dv>i-->
                 <label class="layui-form-label">客户查询</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" style="width:198px" name="k_name">
+                    <input type="text" class="layui-input" style="width:198px" name="ck_name">
                 </div>
                 <label class="layui-form-label" style="width:88px">付款时间查询</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="time" class="layui-input" style="width:198px" id="test5">
+                    <input type="text" class="layui-input" style="width:198px" id="pay_time">
                 </div>
                 <label class="layui-form-label" id="customer_label" >合同状态</label>
                 <div class="layui-input-inline" id="customer_div" >
@@ -88,7 +92,8 @@
                 </div>
                 <button type="button" class="layui-btn buttonsel" data-type="reload">搜索</button>
             </div>
-            <table class="layui-hide" id="test" lay-filter="tooler"></table>
+            <table class="layui-hide" id="c_table" lay-filter="tooler"></table>
+            <input type="hidden" name="pay_time">
         </form>
         <table id="demo" lay-filter="test"></table>
     </div>
@@ -97,20 +102,11 @@
 
 
 <script>
-
     // 销售合同 js
     layui.use('laydate', function(){
         var laydate = layui.laydate;
-        //执行一个laydate实例
         laydate.render({
-            elem: '#test6' //指定元素
-            ,range: true
-            ,done:function (endDate) {
-                $("input[name='create_time']").val(endDate);
-            }
-        });
-        laydate.render({
-            elem: '#test5' //指定元素
+            elem: '#s_time' //指定元素
             ,range: true
             ,done:function (endDate) {
                 $("input[name='sk_time']").val(endDate);
@@ -120,7 +116,7 @@
     layui.use('table', function(){
         var table = layui.table;
         table.render({
-            elem: '#demo'
+            elem: '#x_table'
             ,url:'{:url("index/contract/contract_xdata")}'
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,page: true
@@ -144,9 +140,9 @@
 //                console.log(res);
             }
         });
-        $('.buttonsel').on('click',function(){
-            var sk_time=$('input[name="time"]').val();
-            var name=$('input[name="k_name"]').val();
+        $('.x_buttonsel').on('click',function(){
+            var sk_time=$('input[name="sk_time"]').val();
+            var name=$('input[name="xk_name"]').val();
             table.reload('idTest',{
                 where:{
                     sk_time:sk_time,
@@ -168,25 +164,19 @@
         layui.use('laydate', function(){
         var laydate = layui.laydate;
         //执行一个laydate实例
+
         laydate.render({
-            elem: '#test6' //指定元素
+            elem: '#pay_time' //指定元素
             ,range: true
             ,done:function (endDate) {
-                $("input[name='create_time']").val(endDate);
-            }
-        });
-        laydate.render({
-            elem: '#test5' //指定元素
-            ,range: true
-            ,done:function (endDate) {
-                $("input[name='sk_time']").val(endDate);
+                $("input[name='pay_time']").val(endDate);
             }
         });
     });
     layui.use('table', function(){
         var table = layui.table;
         table.render({
-            elem: '#demo'
+            elem: '#c_table'
             ,url:'{:url("index/contract/contract_cdata")}'
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,page: true
@@ -211,11 +201,11 @@
             }
         });
         $('.buttonsel').on('click',function(){
-            var sk_time=$('input[name="time"]').val();
-            var name=$('input[name="k_name"]').val();
+            var pay_time=$('input[name="pay_time"]').val();
+            var name=$('input[name="ck_name"]').val();
             table.reload('idTest',{
                 where:{
-                    sk_time:sk_time,
+                    sk_time:pay_time,
                     name:name,
                 }
                 ,page:{

@@ -4,9 +4,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>商品列表</title>
-		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="__STATIC__/css/global.css" media="all">
-		<link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+		<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
+		<script src="__STATIC__/layui/layui.js"></script>
 		<style>
 			.searchInfo{
 			  max-width: 120px;
@@ -36,17 +37,53 @@
 			.search:active,.reset:active{
 				transform: scale(0.88)
 			}
+			.hide{
+				display:none;
+			}
 		</style>
 	</head>
 
 	<body>
+	<div id="goodsInfo" class="hide">
+		<form class="layui-form" id="goodsinfo_form">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+				<legend>添加商品信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品名称:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="goods_name" lay-verify="required" placeholder="输入名称(必填)" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label">商品类型:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="goods_type" placeholder="输入类型(必填)" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品型号:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="norms_name"  placeholder="可选填" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label">商品厂商:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="manufacturer" placeholder="可选填" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">衡量单位:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="unit" lay-verify="required" placeholder="输入单位(必填)" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</form>
+	</div>
 		<div class="admin-main">
 		<!-- 商品列表 -->
 			
 			<div class="layui-form-item" style="width: 99%;padding: 5px;">
 				<fieldset class="layui-elem-field">
 					<legend>商品列表</legend>
-					<div class="layui-field-box">
+					<div class="layui-field-box goods_add">
 						<a href="#" class="layui-btn layui-btn-normal"> <i class="layui-icon">&#xe608;</i> 添加</a>
 					</div>
 					<div >
@@ -83,50 +120,94 @@
 						
 					</div>
 				</fieldset>
-				<table class="layui-table" >
-				  <colgroup>
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				  </colgroup>
-				  <thead>
-				    <tr>
-				      <th>商品名称</th>
-				      <th>商品品类</th>
-				      <th>单位</th>
-				      <th>税率</th>
-				      <th>价格计算方式</th>
-				      <th>操作</th>
-				    </tr> 
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <td>贤心</td>
-				      <td>2016-11-29</td>
-				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
-				      <td>人生就像是一场修行</td>
-				    </tr>
-				    <tr>
-				      <td>许闲心</td>
-				      <td>2016-11-28</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				    </tr>
-				  </tbody>
-				</table>
-      
+				<table class="layui-hide" id="goodstable"></table>
+				<!--<table class="layui-table" >-->
+				  <!--<colgroup>-->
+				    <!--<col width="150">-->
+				    <!--<col width="150">-->
+				    <!--<col width="150">-->
+				    <!--<col width="150">-->
+				    <!--<col width="150">-->
+				    <!--<col width="150">-->
+				  <!--</colgroup>-->
+				  <!--<thead>-->
+				    <!--<tr>-->
+				      <!--<th>商品名称</th>-->
+				      <!--<th>商品品类</th>-->
+				      <!--<th>单位</th>-->
+				      <!--<th>税率</th>-->
+				      <!--<th>价格计算方式</th>-->
+				      <!--<th>操作</th>-->
+				    <!--</tr> -->
+				  <!--</thead>-->
+				  <!--<tbody>-->
+				    <!--<tr>-->
+				      <!--<td>贤心</td>-->
+				      <!--<td>2016-11-29</td>-->
+				      <!--<td>人生就像是一场修行</td>-->
+				      <!--<td>人生就像是一场修行</td>-->
+				      <!--<td>人生就像是一场修行</td>-->
+				      <!--<td>人生就像是一场修行</td>-->
+				    <!--</tr>-->
+				    <!--<tr>-->
+				      <!--<td>许闲心</td>-->
+				      <!--<td>2016-11-28</td>-->
+				      <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
+				      <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
+				      <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
+				      <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
+				    <!--</tr>-->
+				  <!--</tbody>-->
+				<!--</table>-->
+      <!---->
 			</div>
 		</div>
-		<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>   
-		<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+		<!--<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>   -->
+		<!--<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>-->
 		<script>
+            $('.goods_add').click(function () {
+                layer.open({
+                    type: 1
+                    ,closeBtn: 2
+                    ,shadeClose: true
+                    ,offset: 'auto'
+                    ,anim: 1
+                    ,area: ['50%', '60%']
+                    ,btn:['确定','取消']
+                    ,shade: 0.8
+                    ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    ,btnAlign: 'c'
+                    ,moveType: 1 //拖拽模式，0或者1
+                    ,content: $("#goodsInfo")
+                    ,yes:function () {
+						var goods_name=$('input[name="goods_name"]').val();
+						var goods_type=$('input[name="goods_type"]').val();
+						var norms_name=$('input[name="norms_name"]').val();
+						var manufacturer=$('input[name="manufacturer"]').val();
+						var unit=$('input[name="unit"]').val();
+						if(goods_name && goods_type && unit !=''){
+                            $.ajax({
+                                url:'{:url("index/goods/goods_add")}',
+                                type:'post',
+                                data:{name:goods_name,type:goods_type,norms:norms_name,manufacturer:manufacturer,unit:unit},
+                                success:function (res) {
+                                    var res=JSON.parse(res);
+                                    if(res.status=='success'){
+                                        layer.msg(res.msg);
+									}else{
+                                        layer.msg(res.msg);
+									}
+                                }
+                            })
+						}else{
+						    layer.msg('请填写必填项！');
+						}
+
+                    }
+
+                });
+
+            })
 
 
 		</script>
