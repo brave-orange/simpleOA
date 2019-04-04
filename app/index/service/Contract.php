@@ -152,6 +152,7 @@ class Contract extends Model{
     public function contract_cdata(){
         if(request()->isPost()){
             $p=input('param.page');
+            $limit = input("post.limit");
             $page=($p-1)*10;
             $where="";
             $contract_status=input('param.contract_status');
@@ -169,6 +170,16 @@ class Contract extends Model{
             }
             $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.cg_contract_id where contract_type='c' $where limit $page,10";
             $res=Db::query($sql);
+             foreach($res as $key=>&$val){
+                if($val['contract_status']=='0'){
+                    $val['contract_status']='未审核';
+                }elseif($val['contract_status']=='1'){
+                    $val['contract_status']='已审核';
+                }elseif($val['contract_status']=='3'){
+                    $val['contract_status']='已完成';
+                }
+                $val['contract_type'] = $val['contract_type'] =='x' ? '销售合同' : '采购合同';
+            }
             $count=count($res);
             return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
 
@@ -195,17 +206,15 @@ class Contract extends Model{
             }
             $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.xs_contract_id where contract_type='x' $where limit $page,10";
             $res=Db::query($sql);
-            foreach($res as $key=>$val){
-                if($res[$key]['contract_status']=='0'){
-                    $res[$key]['contract_status']='未审核';
-                }elseif($res[$key]['contract_status']=='1'){
-                    $res[$key]['contract_status']='已审核';
-                }elseif($res[$key]['contract_status']=='3'){
-                    $res[$key]['contract_status']='已完成';
+            foreach($res as $key=>&$val){
+                if($val['contract_status']=='0'){
+                    $val['contract_status']='未审核';
+                }elseif($val['contract_status']=='1'){
+                    $val['contract_status']='已审核';
+                }elseif($val['contract_status']=='3'){
+                    $val['contract_status']='已完成';
                 }
-                if($res[$key]['contract_type']=='x'){
-                    $res[$key]['contract_type']='销售合同';
-                }
+                $val['contract_type'] = $val['contract_type'] =='x' ? '销售合同' : '采购合同';
             }
             $count=count($res);
             return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
@@ -252,5 +261,11 @@ class Contract extends Model{
                }
             }
        }
+    }
+
+    public function getContactDetail($contract_id){
+        $contract_base = model("Contract")->get($contract_id);
+        $contract_detail = model("ContractDetail")->getDetail($contract_id);
+        return ["base"=>$contract_base,"detail"=>$contract_detail];
     }
 }

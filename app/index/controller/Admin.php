@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 use app\common\controller\CommonController;
+use app\index\model\AuthAccess;
 use think\Request;
 use think\Db;
 use think\Session;
@@ -215,10 +216,12 @@ class Admin extends CommonController{
         }else if(Request::instance()->isPost()){   //为用户分配角色
             $id = input('post.uid');
             $roles = $_POST['roles'];
+
             if(!empty($roles)){
                 model("AuthAccess")->where(['uid'=>$id])->delete();//删除用户原有角色
+                $as = new AuthAccess();
                 foreach ($roles as $key => $value) {
-                    model("AuthAccess")->addAccess($id,$value);   //用户新增角色
+                    $as->addAccess($id,$value);   //用户新增角色
                 }
             }else{
                 model("AuthAccess")->where(['uid'=>$id])->delete();//删除用户原有角色

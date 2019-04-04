@@ -72,7 +72,7 @@ class Process extends CommonController{
             return model('Process','service')->get_process_list($start,$limit,0);
         }
     }
-    public function processChild(){
+    public function processChild(){    //初始化节点对话框
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $this->assign("process_id",$process_id);
@@ -83,7 +83,7 @@ class Process extends CommonController{
         }
     }
 
-    public function addNode(){
+    public function addNode(){    //添加节点
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $this->assign("process_id",$process_id);
@@ -102,7 +102,7 @@ class Process extends CommonController{
             
         }
     }
-    public function  processNodes(){
+    public function  processNodes(){    //查看流程的所有节点
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $nodes = model("Process","service")->get_process_nodes($process_id);
@@ -110,4 +110,26 @@ class Process extends CommonController{
             return $this->fetch();
         }
     }
+
+    public function contractProcess(){    //进入合同审批流程
+        if (Request::instance()->isGet()){
+            $contract_id = input("get.contract_id");
+            $contract_data = model("Contract","service")->getContactDetail($contract_id);
+            $this->assign('contract_data',$contract_data);
+            $action = model("Process")->get("PR-20190404-1")["form_content"];
+            if(model("Contract")->getContractType($contract_id) == "销售合同"){
+                $this->assign('contract_type',"销售");
+            }else{
+                $this->assign('contract_type',"采购");
+            }
+            return $this->fetch($action);
+        }
+    }
+
+
+    public function processTest(){
+        return view();
+         
+    }
+
 }

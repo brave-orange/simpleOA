@@ -99,7 +99,7 @@ Class Process extends Model{
         return json_decode(json_encode(['code'=>'0','msg'=>'','count' => $count,'data'=>$data],JSON_UNESCAPED_UNICODE));
     }
 
-    public function get_process_nodes($process_id){
+    public function get_process_nodes($process_id){  //获取流程的所有节点
         $nodes = [];
         $res = model("ProcessNode")->where(["processid"=>$process_id,"ishead"=>1])->find();
         $res["opera_person_name"] = model("AuthRole")->where(['id'=>$res["opera_person"]])->find()["name"];
@@ -112,6 +112,10 @@ Class Process extends Model{
         }while ($res["next_node"] != "");
         
         return $nodes;
+    }
+
+    public function startContractProcess($contract){           //合同审批流程开始
+        
     }
 
 }

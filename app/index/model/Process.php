@@ -22,4 +22,5 @@ class Process extends Model{
     public function del_process($process_id){
         return $this->destroy($process_id);
     }
+    
 }
