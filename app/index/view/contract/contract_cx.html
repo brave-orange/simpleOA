@@ -161,7 +161,6 @@
 //                console.log(res);
             }
         });
-
         $('.x_buttonsel').on('click',function(){
             var sk_time=$('input[name="sk_time"]').val();
             var name=$('input[name="xk_name"]').val();
@@ -236,11 +235,10 @@
                     }
                     
                     layer.open({
-                      title:'开始审批',
-                      offset:'100px',
+                      title:'编辑流程节点',
                       type: 1,
                           skin: 'layui-layer-rim', //加上边框
-                      area: ['60%','60%'], //宽高
+                      area: ['80%','60%'], //宽高
                           content: data,
                           scrollbar:true
                          

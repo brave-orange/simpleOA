@@ -388,7 +388,7 @@ body .site-demo-nav .layui-nav-item{line-height: 40px}
 .admin-table-page .page .layui-laypage {margin: 6px 0 0 0;}
 
 /**/
-.admin-main {padding: 10px; margin-bottom: 46px;}
+.admin-main {padding: 10px;	margin-bottom: 46px;}
 
 /*flex 布局*/
 .flex-box {
