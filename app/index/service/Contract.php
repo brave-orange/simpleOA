@@ -151,36 +151,30 @@ class Contract extends Model{
     //采购合同列表数据
     public function contract_cdata(){
         if(request()->isPost()){
-            $p=input('param.page');
-            $limit = input("post.limit");
-            $page=($p-1)*10;
-            $where="";
-            $contract_status=input('param.contract_status');
-            if($contract_status){
-                $where.=" and contract_status=$contract_status";
+            $page = input('param.page');
+            $limit = input('param.limit');
+            $start = ($page-1)*$limit;
+            $where = [];
+            $business_name=input('param.business_name');
+            if($business_name){
+                $where['business_name'] = $business_name;
             }
-            $name=input('param.name');
-            if($name){
-                $where.=" and business_name=$name";
-            }
-            $time=input('param.sk_time');
+            $time=input('param.signtime');
             if($time){
                 $time=explode(' - ',$time);
-                $where.=" and $time[1]>dateofcollection>$time[0]";
+                $where["signtime"] = ["between",[$time[0],$time[1]]];
             }
-            $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.cg_contract_id where contract_type='c' $where limit $page,10";
-            $res=Db::query($sql);
-             foreach($res as $key=>&$val){
-                if($val['contract_status']=='0'){
-                    $val['contract_status']='未审核';
-                }elseif($val['contract_status']=='1'){
-                    $val['contract_status']='已审核';
-                }elseif($val['contract_status']=='3'){
-                    $val['contract_status']='已完成';
-                }
-                $val['contract_type'] = $val['contract_type'] =='x' ? '销售合同' : '采购合同';
+            $contract_id = input('param.contract_id');
+            if($contract_id){
+                $where["contract_id"] = $contract_id;
             }
-            $count=count($res);
+            $res = model("Contract")
+                ->where(["contract_type"=>"c","task_id"=>""])
+                ->limit($start.','.$limit)
+                ->select();
+            $count = model("Contract")
+                ->where(["contract_type"=>"c"])
+                ->count();
             return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
 
         }
@@ -188,35 +182,30 @@ class Contract extends Model{
     //销售合同列表数据
     public function contract_xdata(){
         if(request()->isPost()){
-            $p=input('param.page');
-            $page=($p-1)*10;
-            $where="";
-            $contract_status=input('param.contract_status');
-            if($contract_status){
-                $where.=" and contract_status=$contract_status";
+            $page = input('param.page');
+            $limit = input('param.limit');
+            $start = ($page-1)*$limit;
+            $where = [];
+            $business_name=input('param.business_name');
+            if($business_name){
+                $where['business_name'] = $business_name;
             }
-            $name=input('param.name');
-            if($name){
-                $where.=" and business_name=$name";
-            }
-            $time=input('param.sk_time');
+            $time=input('param.signtime');
             if($time){
                 $time=explode(' - ',$time);
-                $where.=" and $time[1]>dateofcollection>$time[0]";
+                $where["signtime"] = ["between",[$time[0],$time[1]]];
             }
-            $sql ="select * from coa_contract a JOIN coa_com_contract b ON a.contract_id=b.xs_contract_id where contract_type='x' $where limit $page,10";
-            $res=Db::query($sql);
-            foreach($res as $key=>&$val){
-                if($val['contract_status']=='0'){
-                    $val['contract_status']='未审核';
-                }elseif($val['contract_status']=='1'){
-                    $val['contract_status']='已审核';
-                }elseif($val['contract_status']=='3'){
-                    $val['contract_status']='已完成';
-                }
-                $val['contract_type'] = $val['contract_type'] =='x' ? '销售合同' : '采购合同';
+            $contract_id = input('param.contract_id');
+            if($contract_id){
+                $where["contract_id"] = $contract_id;
             }
-            $count=count($res);
+            $res = model("Contract")
+                ->where(["contract_type"=>"x","task_id"=>''])
+                ->where($where)
+                ->select();
+            $count = model("Contract")
+                ->where(["contract_type"=>"x"])
+                ->count();
             return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
 
         }

@@ -114,8 +114,48 @@ Class Process extends Model{
         return $nodes;
     }
 
-    public function startContractProcess($contract){           //合同审批流程开始
+    //进入下一个审批节点（作为生产者，把下一个要执行的节点任务写入任务缓存的表里等待消费）
+    public function nextNode($last_record_id,$task_id,$nextnode){
+        $data = ["last_record_id"=>$last_record_id,"task_id"=>$task_id,"current_node_id"=>$nextnode["nodeid"],"role"=>$nextnode["opera_person"]];
+        return model("TaskCache")->insert($data);
         
+    }
+
+
+    public function startProcess($process_id,$content){           //审批流程开始       
+        $count = model("ProcessTask")->count();
+        $data = [];
+        $data["task_id"]  = "TS-".date("Ymd")."-".($count+1);
+        $data["process_id"] = $process_id;
+        $data["content"] = $content;
+        $data["create_date"] = date("Y-m-d H:i:s");
+        $data["create_person"] = Session::get("name");
+        $data["status"] = model("ProcessNode")->getFristNode($process_id)["node_name"];//获取头结点
+        $data["iscomplete"] = 0;   //初始化审批任务状态为未完成
+        if(model("ProcessTask")->insert($data)){  //初始化第一步
+            $record = [];
+            $record["task_id"] = $data["task_id"];
+            $count = model("ProcessRecord")->where(["task_id"=>$data["task_id"]])->count();
+            $record["id"] = $record["task_id"]."-NO".($count+1);
+            $record["process_id"] = $data["process_id"];
+            $record["node_id"] = model("ProcessNode")->getFristNode($process_id)["nodeid"];
+            $record["status"] = "pass";
+            $record["opera_person"] = Session::get('name');
+            $record["opera_ip"] = $_SERVER['REMOTE_ADDR'];
+            $record["opera_time"] = date("Y-m-d H:i:s");
+            $record["remark"] = "";
+            $nextnode = model("ProcessNode")->getNextNode($record["node_id"]);
+            $task_next = $this->nextNode( $record["id"],$record["task_id"],$nextnode);
+            unset($data);
+            if($task_next){
+                model("ProcessRecord")->insert($record);
+                return $record["task_id"];
+            }else{
+                return false;
+            }
+           
+        }
+        return false;
     }
 
 }

@@ -11,6 +11,7 @@ class ContractDetail extends Model{
             ->where(["contract_id"=>$contract_id])
             ->field("b.goods_id,b.goods_name,a.count,a.price,a.total,a.currency,a.remark")
             ->select();
+        //dump($this->getLastSql());
         return $res;
     }
 }
