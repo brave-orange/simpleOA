@@ -15,7 +15,12 @@ class ProcessNode extends Model{
     public function getAllnodes($head_id){//查出整个流程的节点排序
 
     }
-
+    public function getNextNode($node_id){
+        return $this->get($this->get($node_id)["next_node"]);
+    }
+    public function getFristNode($process_id){
+        return $this->where(["processid"=>$process_id,"ishead"=>1])->find();
+    }
 
     public function savelist($data){
         $error = array();

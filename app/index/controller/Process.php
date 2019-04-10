@@ -72,7 +72,7 @@ class Process extends CommonController{
             return model('Process','service')->get_process_list($start,$limit,0);
         }
     }
-    public function processChild(){
+    public function processChild(){    //初始化节点对话框
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $this->assign("process_id",$process_id);
@@ -83,7 +83,7 @@ class Process extends CommonController{
         }
     }
 
-    public function addNode(){
+    public function addNode(){    //添加节点
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $this->assign("process_id",$process_id);
@@ -102,7 +102,7 @@ class Process extends CommonController{
             
         }
     }
-    public function  processNodes(){
+    public function  processNodes(){    //查看流程的所有节点
         if (Request::instance()->isGet()){
             $process_id = input("get.process_id");
             $nodes = model("Process","service")->get_process_nodes($process_id);
@@ -110,4 +110,37 @@ class Process extends CommonController{
             return $this->fetch();
         }
     }
+
+
+
+    public function contractProcess(){    //进入合同审批流程
+        if (Request::instance()->isGet()){
+            $contract_id = input("get.contract_id");
+            $contract_data = model("Contract","service")->getContactDetail($contract_id);
+            $this->assign('contract_data',$contract_data);
+            $action = model("Process")->get("PR-20190404-1")["form_content"];
+            //dump($contract_data['detail']);
+            if(model("Contract")->getContractType($contract_id) == "销售合同"){
+                $this->assign('contract_type',"销售");
+            }else{
+                $this->assign('contract_type',"采购");
+            }
+            return $this->fetch($action);
+        }else if(Request::instance()->isPost()){
+            $process_data = input("post.process_data");
+            $res = model("Process","service")->startProcess("PR-20190404-1",$process_data);    //添加合同审批任务
+            $contract_id = json_decode($process_data,true)['contract_id'];
+            model("Contract")->isUpdate(true)->where(["contract_id"=>$contract_id])->update(['task_id'=>$res]);//写入taskID
+            if($res){
+                return json('success','提交审批成功，合同已进入审批流程！');
+            }else{
+                return json('error','出现问题了！');
+            }
+        }
+    }
+    public function processTest(){
+        return view();
+         
+    }
+
 }

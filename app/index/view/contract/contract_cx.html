@@ -5,63 +5,78 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <title>合同列表</title>
+    <title>未审批合同列表</title>
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
     <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
+    <!-- <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script> -->
     <script src="__STATIC__/layui/layui.js"></script>
     <style>
+    .layui-tab-card{
+        background-color:#4DAAF3 ;
+
+    }
         .layui-tab-card>.layui-tab-title {
             background-color:#4DAAF3 ;
+        }
+        .layui-tab-content{
+            background-color:#FFF ;
+            margin:0 1px 1px 1px;
+            border-bottom-right-radius: 15px;border-bottom-left-radius:15px;
+        }
+        .left-tab{
+            border-top-left-radius:15px;
         }
 
     </style>
 </head>
 <body>
-<div class="layui-tab layui-tab-card">
-  <ul class="layui-tab-title">
-    <li class="layui-this">销售合同列表</li>
-    <li>采购合同列表</li>
+      <blockquote class="layui-elem-quote">
+                    <h2><i class="layui-icon" style="color:skyblue;font-size: 20px;font-weight: 700; ">&#xe60a;</i> 未开始审批合同列表</h2>
+        </blockquote>
+
+<div class="layui-tab layui-tab-card" style="margin: 10px;border-radius: 15px;">
+  <ul class="layui-tab-title" style="border-top-right-radius: 15px;border-top-left-radius:15px;">
+    <li class="layui-this left-tab">销售合同</li>
+    <li>采购合同</li>
   </ul>
-  <div class="layui-tab-content" style="height: 100px;">
+  <div class="layui-tab-content" style="height: 100%;">
     <!-- 销售合同列表 -->
     <div class="layui-tab-item layui-show">
         <!-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
             <legend>销售合同列表</legend>
         </fieldset> -->
-        <form class="layui-form" action="">
+        <form class="layui-form" action="" id="search">
             <div class="layui-form-item">
                 <!--<label class="layui-form-label" style="width:88px">创建时间查询</label>-->
                 <!--<div class="layui-input-inline">-->
                     <!--<input type="text" name="time" class="layui-input" style="width:198px" id="test6">-->
                 <!--</dv>i-->
-                <label class="layui-form-label">客户查询</label>
+                <label class="layui-form-label" style="width:88px">合同签订日期</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" style="width:198px" name="xk_name">
+                    <input type="text" class="layui-input" style="width:198px" name="signtime" id="signtime">
                 </div>
-                <label class="layui-form-label" style="width:88px">收款时间查询</label>
+                <label class="layui-form-label">合同编号</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" style="width:198px" id="s_time">
+                    <input type="text" class="layui-input" style="width:198px" name="contract_id">
                 </div>
-                <!--id="customer_label"-->
-                <label class="layui-form-label" >合同状态</label>
-                <!--id="customer_div"-->
-                <div class="layui-input-inline"  >
-                    <!--id="customer"-->
-                    <select lay-filter="customer" name="contract_status">
-                        <option value="" selected>请选择</option>
-                        <option value="0">未审核</option>
-                        <option value="1">已审核</option>
-                        <option value="2">已完成</option>
-                    </select>
+                <label class="layui-form-label">销售商名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" style="width:198px" name="business_name">
                 </div>
+                
+        
                 <button type="button" class="layui-btn x_buttonsel" data-type="reload">搜索</button>
             </div>
-            <table class="layui-hide" id="tooler1" lay-filter="tooler"></table>
-            <input type="hidden" name="sk_time">
         </form>
-        <table id="x_table" lay-filter="test"></table>
+        <script type="text/html" id="toolbar1">
+                    <a  class="layui-btn layui-btn-xs" lay-event="start"><i class="layui-icon">&#xe608;</i>提交审批</a>
+                    <a  class="layui-btn layui-btn-xs layui-btn-danger " lay-event="edit"><i class="layui-icon">&#xe640;</i>修改</a>
+                </script>
+        <table id="x_table" lay-filter="sell"></table>
     </div>
+    <!-- /销售合同列表 -->
+
+
     <!-- 采购合同列表 -->
     <div class="layui-tab-item">
         <!-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
@@ -77,7 +92,7 @@
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" style="width:198px" name="ck_name">
                 </div>
-                <label class="layui-form-label" style="width:88px">付款时间查询</label>
+                <label class="layui-form-label" style="width:88px">合同签订日期</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" style="width:198px" id="pay_time">
                 </div>
@@ -92,10 +107,13 @@
                 </div>
                 <button type="button" class="layui-btn buttonsel" data-type="reload">搜索</button>
             </div>
-            <table class="layui-hide" id="c_table" lay-filter="tooler"></table>
+            <table  id="c_table" lay-filter="purchase"></table>
             <input type="hidden" name="pay_time">
         </form>
-        <table id="demo" lay-filter="test"></table>
+        <script type="text/html" id="toolbar2">
+                    <a  class="layui-btn layui-btn-xs" lay-event="start"><i class="layui-icon">&#xe608;</i>提交审批</a>
+                    <a  class="layui-btn layui-btn-xs layui-btn-danger " lay-event="edit"><i class="layui-icon">&#xe640;</i>修改</a>
+                </script>
     </div>
   </div>
 </div>
@@ -106,47 +124,75 @@
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
-            elem: '#s_time' //指定元素
+            elem: '#signtime' //指定元素
             ,range: true
-            ,done:function (endDate) {
-                $("input[name='sk_time']").val(endDate);
-            }
         });
     });
-    layui.use('table', function(){
+    layui.use(['table','form'],function(){
         var table = layui.table;
+        var form = layui.form;
         table.render({
             elem: '#x_table'
             ,url:'{:url("index/contract/contract_xdata")}'
-            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cellMinWidth: 80 
             ,page: true
-            ,id:'idTest'
             ,method:'post'
             ,cols: [[
-                {field:'contract_id', title: '合同编号'}
-                ,{field:'business_name', title: '客户名称'} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'contract_type', title: '合同类别'}
-                ,{field:'contract_file', title: '合同附件'}
-                ,{field:'creator', title: '创建人', align: 'center'} //单元格内容水平居中
-                ,{field:'money', title: '合同金额', align: 'right'}
-                ,{field:'createdate', title: '创建时间', align: 'right'} //单元格内容水平居中
-                ,{field:'overdueamount', title: '逾期金额', align: 'right'}
-                ,{field:'dateofcollection', title: '最后收款时间', align: 'right'}
-                ,{field:'cg_contract_id', title: '采购合同编号', align: 'right'}
-                ,{field:'contract_status', title: '合同状态', align: 'right'}
-                ,{field:'remarks', title: '备注', align: 'right'}
+                {field:'contract_id',width:120, title: '合同编号'}
+                ,{field:'business_name',width:150, title: '客户名称'} 
+                ,{field:'contract_file',width:100, title: '合同附件'}
+                ,{field:'creator', title: '创建人',width:100, align: 'center'} 
+                ,{field:'money', title: '合同金额',width:100, align: 'right'}
+                ,{field:'createdate', title: '创建时间',width:120, align: 'right'}
+                ,{field:'dateofcollection', title: '最后收款时间',width:120, align: 'right'}
+                ,{field:'cg_contract_id', title: '采购合同编号',width:120, align: 'right'}
+                ,{field:'contract_status', title: '合同状态',width:100, align: 'right'}
+                ,{field:'remarks', title: '备注',width:100, align: 'right'}
+                ,{fixed: 'right', align:'center',minWidth: 200, title:'管理',align:'center', toolbar: '#toolbar1'}
             ]]
+            ,id: 'sellTable'
             ,done:function(res){
-//                console.log(res);
             }
         });
+        table.on("tool(sell)",function(obj){
+            var data = obj.data; 
+            var layEvent = obj.event; 
+            var tr = obj.tr;
+            console.log(data);
+            if(layEvent == 'start'){ //打开开始审批对话框
+                layer.load(); //loadings
+                var id = data.contract_id;
+                var url = "{:url('index/process/contractProcess')}";
+                $.get(url,{contract_id:id},function(data){
+                    if(data.status == 'error'){
+                    layer.msg(data.msg,{icon: 5});
+                    return;
+                    }
+                    layer.open({
+                      title:'提交合同审批',
+                      offset: ['50px', '50px'],
+                      type: 1,
+                          skin: 'layui-layer-rim', //加上边框
+                      area: ['80%','90%'], //宽高
+                          content: data,
+                          scrollbar:true
+                         
+                    });
+                    
+                })
+                layer.closeAll('loading'); //关闭loading
+            
+        }
+        })
         $('.x_buttonsel').on('click',function(){
-            var sk_time=$('input[name="sk_time"]').val();
-            var name=$('input[name="xk_name"]').val();
-            table.reload('idTest',{
+            var signtime=$('input[name="signtime"]').val();
+            var business_name=$('input[name="business_name"]').val();
+            var contract_id=$('input[name="contract_id"]').val();
+            table.reload('sellTable',{
                 where:{
-                    sk_time:sk_time,
-                    name:name,
+                    signtime:signtime,
+                    business_name:business_name,
+                    contract_id:contract_id
                 }
                 ,page:{
                     curr:1
@@ -158,7 +204,6 @@
     layui.use("element",function(){
         var element = layui.element;
     })
-
 
 // 采购合同 JS
         layui.use('laydate', function(){
@@ -180,30 +225,62 @@
             ,url:'{:url("index/contract/contract_cdata")}'
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,page: true
-            ,id:'id2'
             ,method:'post'
             ,cols: [[
                 {field:'contract_id', title: '合同编号'}
-                ,{field:'business_name', title: '客户名称'} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'contract_type', title: '合同类别'}
+                ,{field:'business_name', title: '客户名称'} 
                 ,{field:'contract_file', title: '合同附件'}
-                ,{field:'creator', title: '创建人', align: 'center'} //单元格内容水平居中
+                ,{field:'creator', title: '创建人', align: 'center'}
                 ,{field:'money', title: '合同金额', align: 'right'}
-                ,{field:'createdate', title: '创建时间', align: 'right'} //单元格内容水平居中
+                ,{field:'createdate', title: '创建时间', align: 'right'}
                 ,{field:'earnest_money', title: '采购定金', align: 'right'}
                 ,{field:'dateofcollection', title: '预定付款日期', align: 'right'}
                 ,{field:'xg_contract_id', title: '销售合同编号', align: 'right'}
                 ,{field:'contract_status', title: '合同状态', align: 'right'}
-//                ,{field:'remarks', title: '备注', align: 'right'}
+                ,{field:'remarks', title: '备注', align: 'right'}
+                ,{fixed: 'right', align:'center',minWidth: 200, title:'管理',align:'center', toolbar: '#toolbar2'}
             ]]
+            ,id:"purchaseTable"
             ,done:function(res){
 //                console.log(res);
             }
         });
+        table.on("tool(purchase)",function(obj){
+            var data = obj.data; 
+            var layEvent = obj.event; 
+            var tr = obj.tr;
+            console.log(data);
+            if(layEvent == 'start'){ //打开开始审批对话框
+                layer.load(); //loadings
+                var id = data.contract_id;
+                var url = "{:url('index/process/contractProcess')}";
+                $.get(url,{contract_id:id},function(data){
+                    if(data.status == 'error'){
+                    layer.msg(data.msg,{icon: 5});
+                    return;
+                    }
+                    layer.open({
+                      title:'提交合同审批',
+                      offset: ['50px', '50px'],
+                      type: 1,
+                          skin: 'layui-layer-rim', //加上边框
+                      area: ['80%','90%'], //宽高
+                          content: data,
+                          scrollbar:true
+                         
+                    });
+                    
+                })
+                layer.closeAll('loading'); //关闭loading
+            
+        }
+        })
         $('.buttonsel').on('click',function(){
             var pay_time=$('input[name="pay_time"]').val();
             var name=$('input[name="ck_name"]').val();
-            table.reload('id2',{
+
+            table.reload('purchaseTable',{
+
                 where:{
                     sk_time:pay_time,
                     name:name,

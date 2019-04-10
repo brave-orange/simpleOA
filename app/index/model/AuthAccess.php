@@ -47,11 +47,13 @@ class AuthAccess extends Model{
     }
     //为用户添加角色
     public function addAccess($uid,$role_id){
-        $this->data([
+
+        return $this->isUpdate(false)->data([
             "role_id" => $role_id,
             "uid" => $uid
-        ]);
-       return $this->save();
+        ])->save();
+
+       //return $this->save();
     }
 
     //删除角色权限规则
