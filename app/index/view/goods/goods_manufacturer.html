@@ -4,9 +4,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>商品厂商列表</title>
-		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="__STATIC__/css/global.css" media="all">
-		<link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+		<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
+		<script src="__STATIC__/layui/layui.js"></script>
 		<style>
 			.layui-input{
 				padding: 1px 5px !important;
@@ -27,15 +28,15 @@
 			<div class="layui-form-item" style="width: 99%;padding: 5px;">
 				<fieldset class="layui-elem-field">
 					<legend>商品厂商列表</legend>
-					<div class="layui-field-box">
-						<a href="#" class="layui-btn layui-btn-normal"> <i class="layui-icon">&#xe608;</i> 添加</a>
-					</div>
+					<!--<div class="layui-field-box">-->
+						<!--<a href="#" class="layui-btn layui-btn-normal"> <i class="layui-icon">&#xe608;</i> 添加</a>-->
+					<!--</div>-->
 					<div >
 						<form class="layui-form searchForm" action="" >
 						  <p style="margin: 10px;">
 						  	商品厂商名称：
 						  		
-						  	<input type="text" class="layui-input searchInfo">
+						  	<input type="text" id="manufacturer" class="layui-input searchInfo">
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius search"><i class="layui-icon">&#xe615;</i> 查找</a>
 							<a href="#" class="layui-btn layui-btn-sm layui-btn-radius reset"><i class="layui-icon">&#xe674;</i> 重置</a>
 						  </p>
@@ -43,39 +44,66 @@
 						
 					</div>
 				</fieldset>
-				<table class="layui-table" >
-				  <colgroup>
-				    <col width="150">
-				    <col width="150">
-				    <col width="150">
-				  </colgroup>
-				  <thead>
-				    <tr>
-				      <th>商品厂商编号</th>
-				      <th>商品厂商名称</th>
-				      <th>操作</th>
-				    </tr> 
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <td>贤心</td>
-				      <td>2016-11-29</td>
-				      <td>人生就像是一场修行</td>
-				    </tr>
-				    <tr>
-				      <td>许闲心</td>
-				      <td>2016-11-28</td>
-				      <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-				    </tr>
-				  </tbody>
-				</table>
-      
+				<table class="layui-hide" id="manufacturer_table" lay-filter="tooler"></table>
 			</div>
 		</div>
-		<script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>   
-		<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+		<script type="text/html" id="manufacturer_Demo" >
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
 		<script>
+            layui.use('table', function(){
+                var table = layui.table;
+                table.render({
+                    elem: '#manufacturer_table'
+                    ,url:'{:url("index/goods/manufacturer_data")}'
+                    ,cellMinWidth: 80
+                    ,id:'manufacturer_sel'
+                    ,cols: [[
+                        {field:'manufacturer', title: '商品厂商名称'}
+                        ,{field:'creator', title: '创建人'}
+                        ,{fixed: 'right', title:'操作', toolbar: '#manufacturer_Demo', width:150}
+                    ]]
+                    ,page: true
 
+                });
+                $(".search").click(function(){
+                    var manufacturer=$("#manufacturer").val();
+//                    console.log(name);
+                    table.reload('manufacturer_sel', {
+                        method:'post',
+                        where: { //设定异步数据接口的额外参数，任意设
+                            manufacturer:manufacturer
+                            //…
+                        }
+                        , page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    });
+                })
+
+                //监听行工具事件
+                table.on('tool(test)', function(obj){
+                    var data = obj.data;
+                    //console.log(obj)
+                    if(obj.event === 'del'){
+                        layer.confirm('真的删除行么', function(index){
+                            obj.del();
+                            layer.close(index);
+                        });
+                    } else if(obj.event === 'edit'){
+                        layer.prompt({
+                            formType: 2
+                            ,value: data.email
+                        }, function(value, index){
+                            obj.update({
+                                email: value
+                            });
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
 
 		</script>
 	</body>

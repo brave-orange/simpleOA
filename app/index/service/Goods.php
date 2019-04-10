@@ -8,11 +8,32 @@
 namespace app\index\service;
 use think\Model;
 use think\Session;
+use think\Db;
 class Goods extends Model{
     //商品种类
     public function goods_type(){
-        return Model('GoodsType')->select();
-
+//        return Model('GoodsType')->select();
+        return Model('goods')->field('goods_type')->group('goods_type')->select();
+    }
+    //商品名称
+    public function goods_name(){
+        return Model('goods')->field('goods_id,goods_name')->select();
+    }
+    //获取商品型号
+    public function get_norms(){
+        if(request()->isPost()){
+            $goods_id=input("param.goods_id");
+            return Model('goods')->field('norms')->where('goods_id',$goods_id)->find();
+        }
+    }
+    //通过联动获取 商品名称
+    public function get_names(){
+        if(request()->isPost()){
+            $goods_type=input("param.type");
+            return Model('goods')->field('goods_id,goods_name')->where('goods_type',$goods_type)->select();
+        }elseif(request()->isGet()){
+            return Model('goods')->field('norms')->select();
+        }
     }
     //商品添加
     public function goods_add(){
@@ -45,15 +66,51 @@ class Goods extends Model{
     }
     //商品数据查询
     public function list_data(){
-        if(request()->isPost()){
+        if(request()->isGet()) {
+            $res = Model('goods')->select();
+            $count = count($res);
+            return json_decode(json_encode(['code' => 0, 'msg' => '', 'count' => $count, 'data' => $res], JSON_UNESCAPED_UNICODE));
+        }elseif(request()->isPost()){
             $page=input("param.page");
-//            $limit=($page-1)
+            $li=input("param.limit");
+            $data=array();
+            $name=input('param.name');
+            if($name !=""){
+                $data=['goods_name'=>$name];
+            }
+            $type=input('param.type');
+            if($type !=""){
+                $data=['goods_type'=>$type];
+            }
+            $norms=input('param.norms');
+            if($norms !=""){
+                $data=['norms'=>$norms];
+            }
+            $manufacturer=input('param.manufacturer');
+            if($manufacturer !=""){
+                $data=['manufacturer'=>$manufacturer];
+            }
+            if($data){
+                $res=Model('goods')->where($data)->page($page,$li)->select();
+            }else{
+                $res=Model('goods')->select();
+            }
+            $count=count($res);
+            return json_decode(json_encode(['code'=>0,'msg'=>'','count' =>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
         }
     }
-    //商品型号
-    public function goods_norms(){
-
+    //厂家数据
+    public function manufacturer_data(){
+        if(request()->isGet()){
+//            model("goods")->group()
+            $res=Model('goods')->count('manufacturer');
+            var_dump($res);
+        }elseif(request()->isPost()){
+            $res=Model('goods')->count('manufacturer');
+            var_dump($res);
+        }
     }
+
     //商品厂家
     public function goods_manufactor(){
 

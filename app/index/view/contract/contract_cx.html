@@ -180,7 +180,7 @@
             ,url:'{:url("index/contract/contract_cdata")}'
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,page: true
-            ,id:'idTest'
+            ,id:'id2'
             ,method:'post'
             ,cols: [[
                 {field:'contract_id', title: '合同编号'}
@@ -203,7 +203,7 @@
         $('.buttonsel').on('click',function(){
             var pay_time=$('input[name="pay_time"]').val();
             var name=$('input[name="ck_name"]').val();
-            table.reload('idTest',{
+            table.reload('id2',{
                 where:{
                     sk_time:pay_time,
                     name:name,

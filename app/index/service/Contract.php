@@ -10,30 +10,44 @@ class Contract extends Model{
         if(Request()->isPost()){
             $data=input('param.formdata');
             $dataobj=json_decode($data,true);
-            if($dataobj){
+            $goods=[];
+            if($dataobj['goodsarr']==''){
+                return json('error','请填写商品信息！');
+            }else{
+                foreach ($dataobj['goodsarr'] as $key=>&$val){
+                   $goods['price']= $val['price'];
+                   $goods['good_id']=$val['name'];
+                   $goods['count']=$val['num'];
+                   $goods['total']=$val['price']*$val['num'];
+                   $goods['currency']='RMB';
+                }
+            }
+            if($dataobj['dataobj'] !=""){
                 //生成销售合同id
                 $str='XS';
                 $contract_id=$this->create_id($str);
-                $dataobj['contract_type']="x";
-                $dataobj['creator']=Session::get('name');
-                $dataobj['create_ip']=$_SERVER['REMOTE_ADDR'];
-                $dataobj['contract_id']=$contract_id;
-                $res=Model('contract')->data($dataobj)->allowField(true)->save();
+                $goods['contract_type']="x";
+                $goods['creator']=Session::get('name');
+                $goods['create_ip']=$_SERVER['REMOTE_ADDR'];
+                $goods['contract_id']=$contract_id;
+                $goods['contract_file']=$dataobj['dataobj']['contract_file'];
+                $goods['money']=$dataobj['dataobj']['money'];
+                $goods['business_name']=$dataobj['dataobj']['business_name'];
+                $goods['contract_type']='c';
+                $goods['createdate']=date("Y-m-d H:i:s",time());
+                $goods['dateofcollection']=$dataobj['dataobj']['dateofcollection'];
+                $res=Model('contract')->data($goods)->allowField(true)->save();
                 if($res){
-                    if($dataobj['cg_contract_id'] !=NULL){
-                        $data=['xs_contract_id'=>$contract_id,'cg_contract_id'=>$dataobj['cg_contract_id']];
-                        $result=Model('ComContract')->data($data)->save();
-                        if($result){
-                            return json('success','成功生成合同编号为'.$contract_id.'的合同！');
-                        }else{
-                            return json('error','添加失败!');
-                        }
-                    }else{
-                        return json('success','成功生成合同编号为'.$contract_id.'的合同！');
+                    if($dataobj['dataobj']['cg_contract_id'] !=''){
+                        Model('ComContract')->data(['cg_contract_id'=>$dataobj['dataobj']['cg_contract_id'],'xs_contract_id'=>$contract_id])->save();
                     }
+                        return json('success','成功生成合同编号为'.$contract_id.'的合同！');
+
                 }else{
                     return json('error','添加失败!');
                 }
+            }else{
+                return json('error','请填写合同信息！');
             }
         }
     }
