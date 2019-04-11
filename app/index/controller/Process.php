@@ -111,20 +111,19 @@ class Process extends CommonController{
         }
     }
 
-
-
     public function contractProcess(){    //进入合同审批流程
         if (Request::instance()->isGet()){
             $contract_id = input("get.contract_id");
             $contract_data = model("Contract","service")->getContactDetail($contract_id);
-            $this->assign('contract_data',$contract_data);
-            $action = model("Process")->get("PR-20190404-1")["form_content"];
+            
+            $action = model("Process")->get("PR-20190404-1")["action"];
             //dump($contract_data['detail']);
             if(model("Contract")->getContractType($contract_id) == "销售合同"){
-                $this->assign('contract_type',"销售");
+                $contract_data['contract_type'] = "销售";
             }else{
-                $this->assign('contract_type',"采购");
+                $contract_data['contract_type'] = "采购";
             }
+            $this->assign('res',$contract_data);
             return $this->fetch($action);
         }else if(Request::instance()->isPost()){
             $process_data = input("post.process_data");
@@ -138,9 +137,54 @@ class Process extends CommonController{
             }
         }
     }
+
+    public function checkTask(){
+        if (Request::instance()->isGet()){
+            $task_id = input("get.task_id");
+            $cache_id = input("get.cache_id");
+            $his = model("Process","service")->getTaskHistory($task_id);
+
+            $this->assign("history",$his);
+            $this->assign("cache_id",$cache_id);
+            return $this->fetch();
+        }
+    }
+    public function getTaskByCache(){    //根据任务缓存信息获取任务信息
+        if (Request::instance()->isGet()){
+            $cid = input('get.id');
+            $res = model("Process","service")->getTaskInfoByCache();
+            $content = json_decode($res,true);
+            $this->assign('res',$content);
+            return $this->fetch($res["action"]);
+        }else if(Request::instance()->isPost()){
+
+        }
+    }
     public function processTest(){
-        return view();
+         dump(model("Process","service")->getTaskinfo());
          
     }
+
+    public function myTask(){
+        if (Request::instance()->isGet()){
+            return $this->fetch();
+        }else if(Request::instance()->isPost()){
+            $page = input('param.page');
+            $limit = input('param.limit');
+            $type = input('param.type');
+            $start = ($page-1)*$limit;
+            $tasks = model("Process","service")->getTaskinfo($start,$limit,$type,true);
+            return $tasks;
+        }
+    }
+
+    public function returnTaskTypepage(){
+        if (Request::instance()->isGet()){
+            $page = input("get.page_name");
+            return $this->fetch($page);
+        }
+    }
+
+
 
 }

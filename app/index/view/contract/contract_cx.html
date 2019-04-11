@@ -7,27 +7,10 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <title>未审批合同列表</title>
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="__STATIC__/css/mine.css"  media="all">
     <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
     <!-- <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script> -->
     <script src="__STATIC__/layui/layui.js"></script>
-    <style>
-    .layui-tab-card{
-        background-color:#4DAAF3 ;
-
-    }
-        .layui-tab-card>.layui-tab-title {
-            background-color:#4DAAF3 ;
-        }
-        .layui-tab-content{
-            background-color:#FFF ;
-            margin:0 1px 1px 1px;
-            border-bottom-right-radius: 15px;border-bottom-left-radius:15px;
-        }
-        .left-tab{
-            border-top-left-radius:15px;
-        }
-
-    </style>
 </head>
 <body>
       <blockquote class="layui-elem-quote">
@@ -39,7 +22,7 @@
     <li class="layui-this left-tab">销售合同</li>
     <li>采购合同</li>
   </ul>
-  <div class="layui-tab-content" style="height: 100%;">
+  <div class="layui-tab-content" style="min-height: 500px;">
     <!-- 销售合同列表 -->
     <div class="layui-tab-item layui-show">
         <!-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
@@ -269,9 +252,10 @@
                           scrollbar:true
                          
                     });
+                     layer.closeAll('loading'); //关闭loading
                     
                 })
-                layer.closeAll('loading'); //关闭loading
+               
             
         }
         })

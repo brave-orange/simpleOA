@@ -1,33 +1,34 @@
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 <legend>
-    <a href="">新{$contract_type}合同审批</a>
+    <a href="">新{$res.contract_type}合同审批</a>
 </legend>
 </fieldset>
 <form class="layui-form" action="" id="process">
+  <input type="text" class="layui-hide" name="contract_type" value="{$res.contract_type}">
   <div class="layui-form-item">
     <label class="layui-form-label">合同编号：</label>
     <div class="layui-input-inline">
-      <input type="text" name="contract_id" required  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" value="{$contract_data.base.contract_id}" readonly>
+      <input type="text" name="contract_id" required  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.contract_id}" readonly>
     </div>
-    <label class="layui-form-label">{$contract_type}客户：</label>
+    <label class="layui-form-label">{$res.contract_type}客户：</label>
     <div class="layui-input-inline">
-      <input type="text" name="business_name" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" value="{$contract_data.base.business_name}" readonly>
+      <input type="text" name="business_name" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.business_name}" readonly>
     </div>
     <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">申请人：</label>
     <div class="layui-input-inline">
-      <input type="text" name="sign_time" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$contract_data.base.creator}" readonly>
+      <input type="text" name="sign_time" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$res.creator}" readonly>
     </div>
-    <label class="layui-form-label">{$contract_type}金额：</label>
+    <label class="layui-form-label">{$res.contract_type}金额：</label>
     <div class="layui-input-inline">
-    <input type="number" name="money" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$contract_data.base.money}" readonly>
+    <input type="number" name="money" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$res.money}" readonly>
     </div>
     <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">{$contract_type}商品：</label>
+    <label class="layui-form-label">{$res.contract_type}商品：</label>
     <div class="layui-input-block">
     <div style="width: 98%;padding: 5px;border:2px solid skyblue">
     <table class="layui-table" >
@@ -38,13 +39,13 @@
       </colgroup>
       <thead>
         <tr>
-          <th>{$contract_type}商品</th>
+          <th>{$res.contract_type}商品</th>
           <th>数量</th>
-          <th>{$contract_type}金额</th>
+          <th>{$res.contract_type}金额</th>
         </tr> 
       </thead>
       <tbody id="detail">
-      {volist name="contract_data.detail" id="vo"}
+      {volist name="res.content" id="vo"}
           <tr>
           <td class="goods_name">{$vo.goods_name}</td>
           <td class="count">{$vo.count}</td>

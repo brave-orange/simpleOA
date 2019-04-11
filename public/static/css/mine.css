@@ -73,3 +73,27 @@
     height: 30px;
     border: solid;
 }
+/*TAB标签样式*/
+    .layui-tab-card{
+        background-color:#4DAAF3 ;
+
+    }
+        .layui-tab-card>.layui-tab-title {
+            background-color:#4DAAF3 ;
+            min-height:35px;
+
+        }
+        .layui-tab-card>.layui-tab-title li{
+
+            font-size: 18px;
+            font-weight: 20px;
+        }
+        .layui-tab-content{
+            background-color:#FFF ;
+            margin:0 1px 1px 1px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius:15px;
+        }
+        .left-tab{
+            border-top-left-radius:15px;
+        }

@@ -1,0 +1,43 @@
+<div id="form_content" style="width: 98%;padding: 5px;border:2px solid skyblue">
+</div>
+<div style="width: 98%;padding: 5px;border:2px solid skyblue">
+   <label class="layui-form-label">审批历史：</label>
+  <div class="layui-form-item">
+   
+    <div class="layui-input-block">
+    
+    <table class="layui-table" >
+      <colgroup>
+        <col width="300">
+        <col width="150">
+        <col width="250">
+        <col width="150">
+        <col width="300">
+        <col width="300">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>审批编号</th>
+          <th>审批人</th>
+          <th>审批节点名称</th>
+          <th>操作</th>
+          <th>附言</th>
+          <th>操作时间</th>
+        </tr> 
+      </thead>
+      <tbody id="detail">
+      {volist name="history" id="vo"}
+          <tr>
+          <td>{$vo.id}</td>
+          <td>{$vo.opera_person}</td>
+          <td>{$vo.node_name}</td>
+          <td>{if condition="$vo.status eq 'pass'"} 通过{else /}驳回 {/if}</td>
+          <td>{$vo.remark}</td>
+          <td>{$vo.opera_time}</td>
+        </tr>
+        {/volist}
+      </tbody>
+    </table>
+    </div>
+</div>
+  </div>

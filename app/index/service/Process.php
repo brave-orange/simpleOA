@@ -158,4 +158,58 @@ Class Process extends Model{
         return false;
     }
 
+    public function getMyTask(){
+        $uid = Session::get("uid");
+        $roles = model("AuthAccess")->getUserRole($uid);
+        $res = model("TaskCache")->where(['role'=>['In',$roles]])->select();
+        return $res;
+    }
+    //找指定的待审批任务信息
+    public function getTaskinfo($start,$limit,$type="",$personal=false){//$type:查找的流程类型,$personal:是否找个人的待审批任务
+    //发起人，合同编号，供应商名称，总价，当前流程，当前处理人
+        $where = [];
+        if($personal){
+            $roles = model("AuthAccess")->getUserRole(Session::get("uid"));
+            $where["a.role"] = ['In',$roles];
+        }
+        if($type != ""){
+
+            $where["c.process_id"]=$type;
+        }
+        $res = model("TaskCache")->alias("a")
+            ->join("coa_process_record b",'a.last_record_id = b.id')
+            ->join("coa_process_task c",'a.task_id = c.task_id')
+            ->join("coa_contract d",'a.task_id = d.task_id')
+            ->field("a.id,c.task_id,b.opera_person last_person,c.create_person,c.status,d.contract_id,d.business_name,d.money,d.signtime")
+            ->where($where)
+            ->limit($start.','.$limit)
+            ->select();
+        $count = model("TaskCache")->alias("a")
+            ->join("coa_process_record b",'a.last_record_id = b.id')
+            ->join("coa_process_task c",'a.task_id = c.task_id')
+            ->join("coa_contract d",'a.task_id = d.task_id')
+            ->where($where)
+            ->count();
+        return json_decode(json_encode(['code'=>'0','msg'=>'','count' => $count,'data'=>$res],JSON_UNESCAPED_UNICODE));
+    }
+    public function nodePass(){
+
+    }
+
+    public function getTaskInfoByCache($cid){
+        $cache = model("TaskCache")->get($cid);
+        $task = model("ProcessTask")->get($cache['task_id']);
+        $action = model("Process")->get($task['process_id']);
+        return ["process_id"=>$task['process_id'],"content"=>$task['content'],"action"=>$action['action']];
+    }
+
+    public function getTaskHistory($task_id){   //得到当前审批任务的审批历史
+         return model("ProcessRecord")->alias("a")
+            ->join("coa_process_node b","a.node_id = b.nodeid")
+            ->where(['task_id'=>$task_id])
+            ->field("a.id,a.status,a.opera_time,a.opera_person,a.remark,b.node_name")
+            ->order("opera_time asc")->select();
+
+    }
+
 }

@@ -31,4 +31,5 @@ return [
     ,'editprocess'           =>      'index/process/editProcess'
     ,'addNode'           =>      'index/process/addNode'
     ,'processNodes'           =>      'index/process/processNodes'
+    ,'mytask'                   =>    'index/process/mytask'
 ];
