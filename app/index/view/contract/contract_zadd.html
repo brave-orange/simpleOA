@@ -16,26 +16,85 @@
         .layui-table td{
             padding:0;
         }
-        .channel_mon{
+        .hide{
             display:none;
         }
     </style>
 </head>
 <body>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
-    <legend style="color:#1E9FFF">添加销售合同基本信息</legend>
+    <legend>
+        <button type="button" class="layui-btn layui-btn-normal addGoods"><i class="layui-icon">&#xe654;</i>选择商品</button>
+    </legend>
 </fieldset>
+<!--弹出层-->
+<div id="goodsInfo" class="hide" style="padding-top: 30px">
+    <form class="layui-form" id="goodsinfo_form">
+        <div class="layui-form-item" >
+            <label class="layui-form-label">商品种类</label>
+            <div class="layui-input-inline">
+                <select name="goods1" id="goods_type" lay-filter="goods_type" lay-verify="">
+                    <option value="">请选择</option>
+                    {foreach :model('goods','service')->goods_type() as $key=>$val}
+                    <option value="{$val.goods_type}">{$val.goods_type}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <label class="layui-form-label">商品名称</label>
+            <div class="layui-input-inline">
+                <select name="goods2" id="get_name" lay-filter="goods_name" lay-verify="">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">数量</label>
+            <div class="layui-input-inline">
+                <input type="number" name="num" required  lay-verify="required" placeholder="请输入数量" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">单价</label>
+            <div class="layui-input-inline">
+                <input type="number" name="price" placeholder="请填写单价" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">/<span>元</span></div>
+        </div>
+    </form>
+    <!--</form>-->
+</div>
+<!--弹出层-->
+<div style="width: 98%;padding: 5px;border:2px solid skyblue">
+    <table class="layui-table">
+        <colgroup>
+            <col  width="200">
+            <col>
+            <col>
+            <col>
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>商品名称</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>单位</th>
+            <th>总价</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="goods_tbody">
+
+        </tbody>
+    </table>
+</div>
 <form class="layui-form" action="">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color:#1E9FFF">添加销售合同基本信息</legend>
+    </fieldset>
     <div class="layui-form-item">
         <label class="layui-form-label" style="width:88px">销售客户名称:</label>
         <div class="layui-input-inline">
             <input type="text" name="xname" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
-
-    </div>
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    </fieldset>
-    <div class="layui-form-item">
         <label class="layui-form-label" style="width:88px">销售合同金额:</label>
         <div class="layui-input-inline">
             <input type="text" name="xmoney" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
@@ -45,6 +104,11 @@
             <input type="text" class="layui-input" id="test1">
         </div>
     </div>
+
+    <!--<div class="layui-form-item">-->
+
+
+    <!--</div>-->
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend style="color:#1E9FFF">添加采购合同基本信息</legend>
     </fieldset>
@@ -57,50 +121,33 @@
         <div class="layui-input-inline">
             <input type="text" name="cmoney"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
-    </div>
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    </fieldset>
-    <div class="layui-form-item">
         <label class="layui-form-label" style="width:88px">采购客户名称:</label>
         <div class="layui-input-inline">
             <input type="text" name="cname" lay-verify="required" placeholder="请输入采购客户" autocomplete="off" class="layui-input">
         </div>
+    </div>
+    <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">-->
+    <!--</fieldset>-->
+    <div class="layui-form-item">
         <label class="layui-form-label" style="width:88px">选择付款日期</label>
         <div class="layui-inline"> <!-- 注意：这一层元素并不是必须的 -->
         <input type="text" class="layui-input" id="test2">
         </div>
-    </div>
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend style="color:#1E9FFF">合同内容</legend>
-    </fieldset>
-    <div class="layui-form-item">
-        <label class="layui-form-label">合同备注</label>
-        <div class="layui-input-block">
-            <input type="text" name="remarks" lay-verify="title" autocomplete="off" placeholder="请输入内容(可选填)" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">创建日期</label>
-        <div class="layui-inline"> <!-- 注意：这一层元素并不是必须的 -->
-            <input type="text" class="layui-input" id="test3">
-        </div>
         <button type="button" class="layui-btn layui-btn-normal" id="test4"><i class="layui-icon">&#xe67c;</i>上传附件照片</button>
     </div>
-    <div class="layui-upload-list">
-        <table class="layui-table">
-            <thead>
-            <tr><th>文件名</th>
-                <th>大小</th>
-                <th>状态</th>
-                <th>操作</th>
-            </tr></thead>
-            <tbody id="demoList"></tbody>
-        </table>
-    </div>
+
+
+    <!--<div class="layui-form-item">-->
+        <!--&lt;!&ndash;<label class="layui-form-label">创建日期</label>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="layui-inline"> &lt;!&ndash; 注意：这一层元素并不是必须的 &ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<input type="text" class="layui-input" id="test3">&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--</div>-->
+
     <div style="margin-top: 20px;"></div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button id="butt" class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left:80px">立即提交</button>
+            <button id="butt" class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left:80px;background-color:#1E9FFF">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary" style="margin-left:140px">重置</button>
         </div>
         <input type="hidden" name="xdateofcollection">
@@ -136,57 +183,58 @@
         });
 
     });
-    layui.use('upload',function () {
-        var upload = layui.upload;
-        var demoListView = $('#demoList');
-        upload.render({
-            elem: '#test4'
-            ,url: '{:url("index/contract/images")}'
-            ,auto: false //选择文件后不自动上传
-            ,bindAction: '#butt' //指向一个按钮触发上传
-            ,field:'zadd'
-            ,multiple:true
-            ,number:'5'
-            ,choose: function(obj){
-                //将每次选择的文件追加到文件队列
-                var files = obj.pushFile();
+    // 添加商品
+    var goodsArr = [];  //所有商品的数组
+    $(".addGoods").on("click",function(){
+        var index = layer.open({
+            title: '添加商品',
+            type:1,
+            btn:['确定','取消'],
+            btnAlign:"x",
+            area: ['60%', '60%'],
+            content: $("#goodsInfo"),
+            yes:function(){
+                var good = {};
+                var name = $("select[name='goods2']").val().trim(),price = $("input[name='price']").val().trim(),num = $("input[name='num']").val().trim();
+                var oName = $("select[name='goods2']").find("option:selected").html();
+                var allPrice = parseInt(price)*parseInt(num);
+                if(name && price && num != ""){
+                    // 渲染table
+                    var _html = "<tr>";
+                    _html += "<td class='idval' style='display:none'>"+name+"</td>";
+                    _html += "<td>"+oName+"</td>";
+                    _html += "<td>"+price+"</td>";
+                    _html += "<td>"+num+"</td>";
+                    _html += "<td>元</td>";
+                    _html += "<td>"+allPrice+"</td>";
+                    _html += "<td><a href='#' class='layui-btn layui-btn-xs layui-btn-danger del'>删除</a></td>";
+                    _html += "</tr>";
+                    $(".layui-table .goods_tbody").append(_html);
+                    good['name'] = name;
+                    good['price'] = price;
+                    good['num'] = num;
 
-                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                obj.preview(function(index, file, result){
-                    var tr = $(['<tr id="upload-'+ index +'">'
-                        ,'<td>'+ file.name +'</td>'
-                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-                        ,'<td>等待上传</td>'
-                        ,'<td>'
-                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
-                        ,'</td>'
-                        ,'</tr>'].join(''));
-                    //单个重传
-                    tr.find('.demo-reload').on('click', function(){
-                        obj.upload(index, file);
-                    });
-
-                    //删除
-                    tr.find('.demo-delete').on('click', function(){
-                        delete files[index]; //删除对应的文件
-                        tr.remove();
-                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                    });
-
-                    demoListView.append(tr);
-//                    console.log(index); //得到文件索引
-//                    console.log(file); //得到文件对象
-//                    console.log(result); //得到文件base64编码，比如图片
-
-                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
-
-                    //这里还可以做一些 append 文件列表 DOM 的操作
-
-                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
-                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
-                });
+                    layer.close(index)
+                }else{
+                    layer.msg("请将信息填写完整！");
+                }
+                goodsArr.push(good);
             }
+        })
+    })
+
+    layui.use('upload',function () {
+        var $ = layui.jquery;
+        var upload = layui.upload;
+
+        upload.render({
+            elem: '#upload_photo'
+            ,url: '{:url("index/contract/images")}'
+            ,field:'xadd'
+            ,accept:'file'
+            ,auto: false //选择文件后不自动上传
+            ,method:"post"
+            ,bindAction: '#butt' //指向一个按钮触发上传
             ,done:function (res,index,upload) {
                 if(res.status == 'success'){
                     $('input[name="contract_file"]').val(res.msg);
@@ -198,7 +246,8 @@
         });
     })
 
-        layui.use('form', function(){
+
+    layui.use('form', function(){
             var form = layui.form;
             form.on('submit(formDemo)', function(data){
                 var dataobj=data.field;
