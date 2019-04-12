@@ -388,7 +388,7 @@ body .site-demo-nav .layui-nav-item{line-height: 40px}
 .admin-table-page .page .layui-laypage {margin: 6px 0 0 0;}
 
 /**/
-.admin-main {padding: 10px;	margin-bottom: 46px;}
+.admin-main {padding: 10px; margin-bottom: 46px;}
 
 /*flex 布局*/
 .flex-box {
@@ -424,3 +424,20 @@ body .site-demo-nav .layui-nav-item{line-height: 40px}
      */
 }
 
+/*TAB标签样式*/
+    .layui-tab-card{
+        background-color:#4DAAF3 ;
+
+    }
+        .layui-tab-card>.layui-tab-title {
+            background-color:#4DAAF3 ;
+        }
+        .layui-tab-content{
+            background-color:#FFF ;
+            margin:0 1px 1px 1px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius:15px;
+        }
+        .left-tab{
+            border-top-left-radius:15px;
+        }

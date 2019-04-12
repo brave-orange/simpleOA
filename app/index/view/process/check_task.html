@@ -1,9 +1,6 @@
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-<legend>
-    <a href="">新{$res.contract_type}合同审批</a>
-</legend>
-</fieldset>
-<form class="layui-form" action="" id="process">
+<div id="form_content" style="width: 98%;padding: 5px;border:2px solid #fff;background: #f1f1f1">
+  <header style="width: 100%;text-align: center;margin-bottom: 20px">-- &nbsp;&nbsp;&nbsp; <b>审批信息</b> &nbsp;&nbsp;&nbsp; --</header>
+  <form class="layui-form" action="" id="process">
   <input type="text" class="layui-hide" name="contract_type" value="{$res.contract_type}">
   <div class="layui-form-item">
     <label class="layui-form-label">合同编号：</label>
@@ -19,7 +16,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">申请人：</label>
     <div class="layui-input-inline">
-      <input type="text" name="creator" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$res.creator}" readonly>
+      <input type="text" name="sign_time" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$res.creator}" readonly>
     </div>
     <label class="layui-form-label">{$res.contract_type}金额：</label>
     <div class="layui-input-inline">
@@ -64,60 +61,45 @@
       <input type="radio" name="seal" value="公章" title="公章" checked>
     </div>
   </div>
-  <div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">备注：</label>
-    <div class="layui-input-block">
-      <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-    </div>
-  </div>
-</form>
 
-<script>
-layui.use('form', function(){
-  var form = layui.form;
-  //监听提交
-  form.on('submit(formDemo)', function(data){
-    layer.msg(JSON.stringify(data.field));
-    var res = data.field;
-    var tab = [];
-    $("#detail").find("tr").each(function(j,it){
-        var id = {};
-        $(this).find("td").each(function(i,item){
-          
-          id[$(this).attr("class")] = $(this).html();
-          
-       })
-        tab.push(id);
-    })
-    
-    res ["content"] = tab;
-    var str_res = JSON.stringify(res);
-    var url = "{:url('index/process/contractProcess')}";
-    $.post(url,{process_data:str_res},function(data){
-        data = JSON.parse(data);
-        if(data.status == 'error'){
-          layer.msg(data.msg,{icon: 5});//失败的表情
-          return;
-        }else if(data.status == 'success'){
-          layer.msg(data.msg, {
-          icon: 6,//成功的表情
-          time: 2000 //2秒关闭（如果不配置，默认是3秒）
-        }, function(){
-          location.reload();
-        }); 
-        }else{
-          layer.msg(data.msg,{icon: 5});//失败的表情
-             return;
-          }
-    })
-    return false;
-  });
-  form.render(); 
-});
-</script>
+</form>
+</div>
+<div style="width: 98%;padding: 5px;border:2px solid skyblue;background: #9cf">
+  <p style="width: 100%;text-align: center;">--- &nbsp;&nbsp;&nbsp; <b>审批历史</b> &nbsp;&nbsp;&nbsp; ---</p>
+  <div class="layui-form-item">
+
+    <table class="layui-table" >
+      <colgroup>
+        <col width="300">
+        <col width="150">
+        <col width="250">
+        <col width="150">
+        <col width="300">
+        <col width="300">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>审批编号</th>
+          <th>审批人</th>
+          <th>审批节点名称</th>
+          <th>操作</th>
+          <th>附言</th>
+          <th>操作时间</th>
+        </tr> 
+      </thead>
+      <tbody id="detail">
+      {volist name="history" id="vo"}
+          <tr>
+          <td>{$vo.id}</td>
+          <td>{$vo.opera_person}</td>
+          <td>{$vo.node_name}</td>
+          <td>{if condition="$vo.status eq 'pass'"} 通过{else /}驳回 {/if}</td>
+          <td>{$vo.remark}</td>
+          <td>{$vo.opera_time}</td>
+        </tr>
+        {/volist}
+      </tbody>
+    </table>
+
+</div>
+  </div>

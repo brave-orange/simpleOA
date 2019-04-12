@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>流程管理</title>
+        <link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all" />
+        <link rel="stylesheet" href="__STATIC__/css/mine.css"  media="all">
+        <link rel="stylesheet" href="__STATIC__/css/font-awesome.min.css">
+    </head>
+
+    <body>
+            <blockquote class="layui-elem-quote">
+                    <h2><i class="layui-icon" style="color:skyblue;font-size: 20px;font-weight: 700; ">&#xe60a;</i> 我的待审批流程</h2>
+        </blockquote>
+
+<div class="layui-tab layui-tab-card" style="margin: 10px;border-radius: 15px;">
+    <ul class="layui-tab-title" style="border-top-right-radius: 15px;border-top-left-radius:15px;">
+    <li class="layui-this left-tab">合同审批流程</li>
+    <li>开票审批流程</li>
+    <li>付款审批流程</li>
+    <li>提货审批流程</li>
+    </ul>
+    <div class="layui-tab-content" style="min-height: 500px;">
+        <!-- 销售合同列表 -->
+        <div id="contract" class="layui-tab-item layui-show">
+        
+        </div>
+        <div id="invoice" class="layui-tab-item">
+        </div>
+        <div id="pay" class="layui-tab-item">
+
+        </div>
+        <div id="takegoods" class="layui-tab-item">
+
+        </div>
+    </div>
+</div>
+    <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>   
+    <script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+
+    <script>
+    layui.use("element",function(){
+            var element = layui.element;
+        })
+    </script>
+    <script>
+        $(function(){
+            $.get("{:url('index/process/returnTaskTypepage')}",{page_name:"contract_process_task"},function(data){
+                $("#contract").html(data);
+            })
+        })
+    </script>
+    
+
+    </body>
+
+
+</html>

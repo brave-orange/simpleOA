@@ -263,6 +263,7 @@ class Contract extends Model
             $res = model("Contract")
                 ->where(["contract_type"=>"x","task_id"=>''])
                 ->where($where)
+                ->limit($start.','.$limit)
                 ->select();
             $count = model("Contract")
                 ->where(["contract_type"=>"x"])
@@ -316,6 +317,7 @@ class Contract extends Model
     public function getContactDetail($contract_id){
         $contract_base = model("Contract")->get($contract_id);
         $contract_detail = model("ContractDetail")->getDetail($contract_id);
-        return ["base"=>$contract_base,"detail"=>$contract_detail];
+        $contract_base['content'] = $contract_detail;
+        return $contract_base;
     }
 }
