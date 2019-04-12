@@ -39,10 +39,12 @@ layui.use(['layer','table'], function() {
             $.get("index/process/checkTask",{cache_id:cache_id,task_id:task_id},function(data){
                 layer.open({
                       title:'查看审批内容',
-                      offset: ['50px', '50px'],
+                      offset: ['50px'],
                       type: 1,
                           skin: 'layui-layer-rim', //加上边框
-                      area: ['80%','90%'], //宽高
+                      btn:["允许","驳回"],
+                      btnAlign:"c",
+                      area: ['60%','80%'], //宽高
                           content: data,
                           scrollbar:true
                          

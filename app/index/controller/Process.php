@@ -143,7 +143,9 @@ class Process extends CommonController{
             $task_id = input("get.task_id");
             $cache_id = input("get.cache_id");
             $his = model("Process","service")->getTaskHistory($task_id);
-
+            $res = model("ProcessTask")->where(["task_id"=>$task_id])->find()["content"];
+            $res = json_decode($res,true);
+            $this->assign("res", $res);
             $this->assign("history",$his);
             $this->assign("cache_id",$cache_id);
             return $this->fetch();

@@ -85,8 +85,8 @@
         }
         .layui-tab-card>.layui-tab-title li{
 
-            font-size: 18px;
-            font-weight: 20px;
+            font-size: 15px;
+            font-weight: 600;
         }
         .layui-tab-content{
             background-color:#FFF ;
