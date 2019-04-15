@@ -1,0 +1,44 @@
+
+<div id="start_content" style="width: 98%;padding: 5px;border:2px solid #fff;background: #f1f1f1">
+  <header style="width: 100%;text-align: center;margin-bottom: 20px;font-size:16px">---- &nbsp;&nbsp;&nbsp; <b>审批信息</b> &nbsp;&nbsp;&nbsp; ----</header>
+  <div id="form" style="width:100%">
+
+  </div>
+
+</div>
+<div id="start_other"  style="width: 98%;padding: 5px;border:2px solid #fff;background: #FFFF99">
+   <header style="width: 100%;text-align: center;margin-bottom: 20px;font-size:16px">---- &nbsp;&nbsp;&nbsp; <b>附加信息</b> &nbsp;&nbsp;&nbsp; ----</header>
+   
+  <form class="layui-form" id="other">
+    <input type="hidden" name="process_id" value="{$process_id}">
+    <input type="hidden" name="id" value="{$id}">
+
+    <div class="layui-form-item">
+    <label class="layui-form-label">盖章类型：</label>
+    <div class="layui-input-block">
+      <input type="radio" name="stamp" value="合同章" title="合同章">
+      <input type="radio" name="stamp" value="公章" title="公章">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注：</label>
+    <div class="layui-input-block">
+      <textarea name="remark" placeholder="请输入内容" class="layui-textarea" style="width: 80%"></textarea>
+    </div>
+  </div>
+   
+  </form>
+</div>
+
+  <script>
+    layui.use("form",function(){
+      var form = layui.form;
+      form.render();
+    })
+  $(function(){
+    
+    $.get("/{$action}",{id:"{$id}"},function(data){
+         $("#form").html(data);
+     })
+  })
+  </script>

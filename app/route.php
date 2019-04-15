@@ -32,4 +32,5 @@ return [
     ,'addNode'           =>      'index/process/addNode'
     ,'processNodes'           =>      'index/process/processNodes'
     ,'mytask'                   =>    'index/process/mytask'
+    ,'contract_process'         =>     'index/process/contractProcess'
 ];
