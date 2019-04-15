@@ -1,7 +1,7 @@
 layui.use(['layer','table'], function() {
     var $ = layui.jquery,
-    form = layui.form,
-    table = layui.table;
+    table = layui.table,
+    layer = layui.layer;
     table.render({
         elem: '#contract_tasklist'
         ,url:"mytask"
@@ -44,13 +44,99 @@ layui.use(['layer','table'], function() {
                           skin: 'layui-layer-rim', //加上边框
                       btn:["允许","驳回"],
                       btnAlign:"c",
-                      area: ['60%','80%'], //宽高
-                          content: data,
-                          scrollbar:true
-                         
+                      area: ['65%','80%'], //宽高
+                      content: data,
+                      scrollbar:true,
+                      yes:function(index,layero){
+                        var data = $(".layui-layer-content").find("form").serialize();
+                        console.log(data);
+                      },
+                      btn2:function(index){
+                        return false;
+                      }
                     });
                      layer.closeAll('loading'); //关闭loading
             })
         }
     })
 })
+
+function satrtprocess(){
+    var content = $(".layui-layer-content").find("#start_content").find("form").serialize();
+    var other =  $(".layui-layer-content").find("#other").serialize();
+    content = decodeURIComponent(content,true);
+    other = decodeURIComponent(other,true);
+    var data = {};
+    var temp= content.split("&");
+    var res = {};
+    for( var i = 0; i < temp.length; i++){
+        var value = temp[i].split("=")
+        res[value[0]] = value[1];
+    }
+    var detail = $(".layui-layer-content").find("#start_content").find("table")
+    if (detail.length != 0){
+        var tab = [];
+        detail.find("tbody").find("tr").each(function(j,it){
+            var id = {};
+            $(this).find("td").each(function(i,item){
+              id[$(this).attr("class")] = $(this).html();
+          })
+            tab.push(id);
+        })
+    }
+    res ["content"] = tab;
+    var str_res = JSON.stringify(res);
+    var stamp = $("input[name='stamp']:checked").val();
+    if(typeof(stamp) == "undefined"){
+        layer.msg("请选择盖章类型！")
+        return false;
+    }
+    var remark = $("input[name='remark']").val();
+    var process_id = $("input[name='process_id']").val();
+    var id = $("input[name='id']").val();
+    var res;
+    $.ajax({
+        url:"/index/process/startProcess",
+        method:"post",
+        async:false,
+        data:{process_data:str_res,stamp:stamp,process_id:process_id,id:id,remark:remark},
+        success:function(data){
+        data = JSON.parse(data);
+            if(data.status == 'error'){
+                layer.msg(data.msg,{icon: 5});//失败的表情
+
+            }else if(data.status == 'success'){
+                var task_id = data.data.task;
+                res = task_id;
+               
+            }
+      }
+    })
+    return res;
+}
+
+function contract_process_start(){
+    var res = satrtprocess();
+    if(res){
+        var data = {};
+        var res_str = JSON.stringify({task_id:res});
+        data["data"] = res_str;
+        data["id"] = $("input[name='id']").val();
+        $.post("/index/contract/updateContractInfo",data,function(data1){
+            if(data1.status == 'success'){
+                layer.msg(data.msg, {
+                    icon: 6,//成功的表情
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                }, function(){
+                    location.reload();
+                }); 
+            }else if(data1.status == 'error'){
+                layer.msg(data.msg,{icon: 5});
+                return false;
+            }
+        })
+
+    }else{
+        console.log("??")
+    }
+}

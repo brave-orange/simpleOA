@@ -122,7 +122,7 @@ Class Process extends Model{
     }
 
 
-    public function startProcess($process_id,$content){           //审批流程开始       
+    public function startProcess($process_id,$content,$remark,$stamp){           //审批流程开始       
         $count = model("ProcessTask")->count();
         $data = [];
         $data["task_id"]  = "TS-".date("Ymd")."-".($count+1);
@@ -132,7 +132,8 @@ Class Process extends Model{
         $data["create_person"] = Session::get("name");
         $data["status"] = model("ProcessNode")->getFristNode($process_id)["node_name"];//获取头结点
         $data["iscomplete"] = 0;   //初始化审批任务状态为未完成
-        if(model("ProcessTask")->insert($data)){  //初始化第一步
+        $data["stamp"] = $stamp;
+        if(model("ProcessTask")->insert($data)){  //初始化第一步(添加提交审批的审批记录)
             $record = [];
             $record["task_id"] = $data["task_id"];
             $count = model("ProcessRecord")->where(["task_id"=>$data["task_id"]])->count();
@@ -143,9 +144,9 @@ Class Process extends Model{
             $record["opera_person"] = Session::get('name');
             $record["opera_ip"] = $_SERVER['REMOTE_ADDR'];
             $record["opera_time"] = date("Y-m-d H:i:s");
-            $record["remark"] = "";
+            $record["remark"] = $remark;
             $nextnode = model("ProcessNode")->getNextNode($record["node_id"]);
-            $task_next = $this->nextNode( $record["id"],$record["task_id"],$nextnode);
+            $task_next = $this->nextNode( $record["id"],$record["task_id"],$nextnode);//进入下一个审批节点，添加任务
             unset($data);
             if($task_next){
                 model("ProcessRecord")->insert($record);

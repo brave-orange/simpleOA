@@ -100,8 +100,7 @@
     </div>
   </div>
 </div>
-
-
+<script type="text/javascript" src="__STATIC__/js/process.js"></script>
 <script>
     // 销售合同 js
     layui.use('laydate', function(){
@@ -145,8 +144,8 @@
             if(layEvent == 'start'){ //打开开始审批对话框
                 layer.load(); //loadings
                 var id = data.contract_id;
-                var url = "{:url('index/process/contractProcess')}";
-                $.get(url,{contract_id:id},function(data){
+                var url = "{:url('index/process/startProcess')}";
+                $.get(url,{id:id,process_id:"PR-20190404-1"},function(data){
                     if(data.status == 'error'){
                     layer.msg(data.msg,{icon: 5});
                     return;
@@ -157,13 +156,20 @@
                       type: 1,
                           skin: 'layui-layer-rim', //加上边框
                       area: ['80%','90%'], //宽高
-                          content: data,
-                          scrollbar:true
-                         
+                      content: data,
+                      scrollbar:true,
+                      btn:["提交审批","取消"],
+                      btnAlign:"c",
+                      yes: function(layero, index){
+                        contract_process_start()
+                      },
+                      btn1:function(layero, index){
+                        
+                      }
                     });
-                    
+                    layer.closeAll('loading'); //关闭loading
                 })
-                layer.closeAll('loading'); //关闭loading
+                
             
         }
         })
