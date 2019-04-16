@@ -74,8 +74,8 @@ class Contract extends CommonController{
         $data = json_decode($data,true);
         $c = model("Contract")->get($id);
 
-        if($c->isUpdate(true)->data($data)->save()){
-            return json('success','信息更新成功');
+        if($c->isUpdate(true)->save($data)){
+            return json('success','提交审批成功，合同已进入审批流程！');
         }else{
             return json('error','出现问题了！');
         }

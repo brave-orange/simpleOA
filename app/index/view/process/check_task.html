@@ -3,8 +3,15 @@
   <div id="form" style="width:100%">
 
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">盖章类型:</label>
+    <div class="layui-input-inline">
+      <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value="{$stamp}" readonly>
+    </div>
+  </div>
 </div>
 <div style="width: 98%;padding: 5px;border:2px solid skyblue;background: #9cf">
+<input type="hidden" name="task_id" value="{$task_id}">
   <p style="width: 100%;text-align: center;font-size:16px">---- &nbsp;&nbsp;&nbsp; <b>审批历史</b> &nbsp;&nbsp;&nbsp; ----</p>
   <div class="layui-form-item">
 

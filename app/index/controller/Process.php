@@ -168,8 +168,10 @@ class Process extends CommonController{
             $task_id = input("get.task_id");
             $cache_id = input("get.cache_id");
             $his = model("Process","service")->getTaskHistory($task_id);
+            $stamp = model("ProcessTask")->get($task_id)["stamp"];
             $this->assign("task_id",$task_id);
             $this->assign("history",$his);
+            $this->assign("stamp",$stamp);
             $this->assign("cache_id",$cache_id);
             return $this->fetch();
         }
@@ -219,6 +221,17 @@ class Process extends CommonController{
         }
     }
 
+    public function passTaskNode(){
+        if (Request::instance()->isPost()){
+            $cache_id = input("post.cache_id");
+            $res = model("Process","service")->passNode($cache_id);
+            if($res){
+                return json('success','审批操作成功！');
+            }else{
+                return json('error','出现问题了！');
+            }
+        }
+    }
 
 
 }

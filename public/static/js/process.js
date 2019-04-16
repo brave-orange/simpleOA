@@ -63,9 +63,7 @@ layui.use(['layer','table'], function() {
 
 function satrtprocess(){
     var content = $(".layui-layer-content").find("#start_content").find("form").serialize();
-    var other =  $(".layui-layer-content").find("#other").serialize();
     content = decodeURIComponent(content,true);
-    other = decodeURIComponent(other,true);
     var data = {};
     var temp= content.split("&");
     var res = {};
@@ -91,7 +89,7 @@ function satrtprocess(){
         layer.msg("请选择盖章类型！")
         return false;
     }
-    var remark = $("input[name='remark']").val();
+    var remark = $("textarea[name='remark']").val();
     var process_id = $("input[name='process_id']").val();
     var id = $("input[name='id']").val();
     var res;
@@ -123,6 +121,8 @@ function contract_process_start(){
         data["data"] = res_str;
         data["id"] = $("input[name='id']").val();
         $.post("/index/contract/updateContractInfo",data,function(data1){
+            data1=JSON.parse(data1);
+            console.log(data1);
             if(data1.status == 'success'){
                 layer.msg(data.msg, {
                     icon: 6,//成功的表情
