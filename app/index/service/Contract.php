@@ -95,7 +95,7 @@ class Contract extends Model
             $str = 'CG';
             $contract_id = $this->create_id($str);
             $contract['contract_type'] = "c";
-            if ($dataobj['dataobj']['earnest_money'] > $dataobj['dataobj']['money']) {
+            if ($dataobj['dataobj']['e_money'] > $dataobj['dataobj']['money']) {
                 return json('error', '定金不能大于采购金额！');
             }
 
@@ -104,7 +104,7 @@ class Contract extends Model
             $contract['contract_id'] = $contract_id;
             $contract['contract_file'] = $dataobj['dataobj']['contract_file'];
             $contract['money'] = $dataobj['dataobj']['money'];
-            $contract['earnest_money'] = $dataobj['dataobj']['earnest_money'];
+            $contract['e_money'] = $dataobj['dataobj']['earnest_money'];
             $contract['business_name'] = $dataobj['dataobj']['business_name'];
             $contract['contract_type'] = 'c';
             $contract['createdate'] = date("Y-m-d H:i:s", time());
@@ -147,33 +147,36 @@ class Contract extends Model
         if(Request::instance()->isPost()){
             $data=input('param.formdata');
             $dataobj=json_decode($data,true);
-            if($dataobj){
+            if($dataobj['goodsarr']==""){
+                return json('error','请填写商品信息！');
+            }
+            if($dataobj['dataobj']){
                 $str='CG';
                 $c_contract_id=$this->create_id($str);
                 $strs='XS';
                 $x_contract_id=$this->create_id($strs);
                 $xdata=array();
                 $xdata['contract_id']=$c_contract_id;
-                $xdata['business_name']=$dataobj['xname'];
-                $xdata['money']=$dataobj['xmoney'];
-                $xdata['dateofcollection']=$dataobj['xdateofcollection'];
-                $xdata['remarks']=$dataobj['remarks'];
-                $xdata['createdate']=$dataobj['createdate'];
+                $xdata['business_name']=$dataobj['dataobj']['xname'];
+                $xdata['money']=$dataobj['dataobj']['xmoney'];
+                $xdata['dateofcollection']=$dataobj['dataobj']['xdateofcollection'];
+                $xdata['remarks']=$dataobj['dataobj']['remarks'];
+                $xdata['createdate']=date("Y-m-d H:i:s",time());
                 $xdata['creator']=Session::get('name');
                 $xdata['create_ip']=$_SERVER['REMOTE_ADDR'];
                 $cdata=array();
                 $cdata['contract_id']=$x_contract_id;
-                $cdata['earnest_money']=$dataobj['emoney'];
-                $cdata['money']=$dataobj['cmoney'];
-                $cdata['business_name']=$dataobj['cname'];
-                $cdata['dateofcollection']=$dataobj['cdateofcollection'];
-                $cdata['remarks']=$dataobj['remarks'];
-                $cdata['createdate']=$dataobj['createdate'];
+                $cdata['e_money']=$dataobj['dataobj']['emoney'];
+                $cdata['money']=$dataobj['dataobj']['cmoney'];
+                $cdata['business_name']=$dataobj['dataobj']['cname'];
+                $cdata['dateofcollection']=$dataobj['dataobj']['cdateofcollection'];
+                $cdata['remarks']=$dataobj['dataobj']['remarks'];
+                $cdata['createdate']=date("Y-m-d H:i:s",time());
                 $cdata['creator']=Session::get('name');
                 $cdata['create_ip']=$_SERVER['REMOTE_ADDR'];
-                $res=Model('contract')->data($xdata)->save();
-                $result=Model('contract')->data($cdata)->save();
-                if($res && $result){
+                $data=[0=>$xdata,1=>$cdata];
+                $res=Model('contract')->saveAll($data,false);
+                if($res){
                     $zdata=['xs_contract_id'=>$x_contract_id,'cg_contract_id'=>$c_contract_id];
                     $r=Model('ComContract')->data($zdata)->save();
                     if($r){
