@@ -111,9 +111,34 @@ class Process extends CommonController{
         }
     }
 
+    public function startProcess(){
+        if (Request::instance()->isGet()){
+            $process_id = input("get.process_id");
+            $id = input("get.id");//业务表的ID
+            $action = model("Process")->get($process_id)["action"];
+            $this->assign("process_id",$process_id);
+            $this->assign("action",$action);
+            $this->assign("id",$id);  //表示开始流程中要使用的数据的付款ID、提货ID或者合同ID
+            return $this->fetch();
+        }else if(Request::instance()->isPost()){
+            $process_data = input("post.process_data");
+            $process_id = input("post.process_id");
+            $remark = input("post.remark");
+            $stamp = input("post.stamp");
+            $id = input("post.id");
+            $task_id = model("Process","service")->startProcess($process_id,$process_data,$remark,$stamp);    //添加合同审批任务
+            if($task_id){
+                 return json('success','提交审批成功，合同已进入审批流程！',["task"=>$task_id]);
+            }else{
+                return json('error','出现问题了！');
+            }
+        }
+
+    }
+
     public function contractProcess(){    //进入合同审批流程
         if (Request::instance()->isGet()){
-            $contract_id = input("get.contract_id");
+            $contract_id = input("get.id");
             $contract_data = model("Contract","service")->getContactDetail($contract_id);
             
             $action = model("Process")->get("PR-20190404-1")["action"];
@@ -143,13 +168,20 @@ class Process extends CommonController{
             $task_id = input("get.task_id");
             $cache_id = input("get.cache_id");
             $his = model("Process","service")->getTaskHistory($task_id);
-            $res = model("ProcessTask")->where(["task_id"=>$task_id])->find()["content"];
-            $res = json_decode($res,true);
-            $this->assign("res", $res);
+            $this->assign("task_id",$task_id);
             $this->assign("history",$his);
             $this->assign("cache_id",$cache_id);
             return $this->fetch();
         }
+    }
+
+    public function getTaskPageandContent(){   //查看审批内容页面用于显示提交的任务表单
+        $task_id = input("get.task_id");
+        $task = model("ProcessTask")->where(["task_id"=>$task_id])->find();
+        $action = model("Process")->where(["process_id"=>$task["process_id"]])->find()['action'];
+        $res = json_decode($task['content'],true);
+        $this->assign("res", $res);
+        return $this->fetch($action);
     }
     public function getTaskByCache(){    //根据任务缓存信息获取任务信息
         if (Request::instance()->isGet()){

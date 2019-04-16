@@ -84,5 +84,16 @@ class Contract extends CommonController{
         header("content-type:text/html;charset=utf-8");
         return model('contract','service')->images();
     }
+    public function updateContractInfo(){
+        $data = input("post.data");
+        $id = input("post.id");
+        $data = json_decode($data,true);
+        $c = model("Contract")->get($id);
 
+        if($c->isUpdate(true)->data($data)->save()){
+            return json('success','信息更新成功');
+        }else{
+            return json('error','出现问题了！');
+        }
+    }
 }
