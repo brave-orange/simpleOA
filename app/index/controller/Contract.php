@@ -33,6 +33,14 @@ class Contract extends CommonController{
     public function contract_zlist(){
         return view();
     }
+    //待开票合同列表
+    public function contract_invoice(){
+        return view();
+    }
+    //待付款合同列表
+    public function contract_pay(){
+        return view();
+    }
     //添加商品
     public function contract_info(){
         if(request()->isGet()){
