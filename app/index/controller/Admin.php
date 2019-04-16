@@ -11,7 +11,11 @@ class Admin extends CommonController{
             return view();
         }
     }
-
+    public function customerList(){
+        if(request()->isGet()){
+            return view();
+        }
+    }
     public function roleList(){
         if (Request::instance()->isGet()){
             return view();
@@ -22,7 +26,12 @@ class Admin extends CommonController{
             return view();
         }
     }
-
+    //获取客户人员列表
+    public function getCustomerList(){
+        $res=model('Customer')->select();
+        $count=count($res);
+        return json_decode(json_encode(['code'=>'0','msg'=>'','count'=>$count,'data'=>$res],JSON_UNESCAPED_UNICODE));
+    }
     public function getUserList(){    //获取所有人员列表
         $res = model('Users')->field('id,name,phone,last_login')->select();
         $count = count($res);

@@ -1,0 +1,112 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>Document</title>
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+    <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>待付款合同列表</legend>
+</fieldset>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <!--<label class="layui-form-label" style="width:88px">创建时间查询</label>-->
+        <!--<div class="layui-input-inline">-->
+        <!--<input type="text" name="time" class="layui-input" style="width:198px" id="test6">-->
+        <!--</dv>i-->
+        <label class="layui-form-label">客户查询</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" style="width:198px" name="k_name">
+        </div>
+        <label class="layui-form-label" style="width:88px">付款时间查询</label>
+        <div class="layui-input-inline">
+            <input type="text" name="time" class="layui-input" style="width:198px" id="test5">
+        </div>
+        <label class="layui-form-label" id="customer_label" >合同状态</label>
+        <div class="layui-input-inline" id="customer_div" >
+            <select lay-filter="customer" id="customer" name="contract_status">
+                <option value="" selected>请选择</option>
+                <option value="0">未审核</option>
+                <option value="1">已审核</option>
+                <option value="2">已完成</option>
+            </select>
+        </div>
+        <button type="button" class="layui-btn buttonsel" data-type="reload">搜索</button>
+    </div>
+    <table class="layui-hide" id="test" lay-filter="tooler"></table>
+</form>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a  class="layui-btn layui-btn-xs  layui-btn-normal " lay-event="edit"><i class="layui-icon">&#xe642;</i>提交采购合同付款申请</a>
+</script>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test6' //指定元素
+            ,range: true
+            ,done:function (endDate) {
+                $("input[name='create_time']").val(endDate);
+            }
+        });
+        laydate.render({
+            elem: '#test5' //指定元素
+            ,range: true
+            ,done:function (endDate) {
+                $("input[name='sk_time']").val(endDate);
+            }
+        });
+    });
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#demo'
+            ,url:'{:url("index/contract/contract_cdata")}'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,page: true
+            ,id:'idTest'
+            ,method:'post'
+            ,cols: [[
+                {field:'contract_id', title: '合同编号'}
+                ,{field:'business_name', title: '客户名称'} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                ,{field:'contract_type', title: '合同类别'}
+                ,{field:'contract_file', title: '合同附件'}
+                ,{field:'creator', title: '创建人', align: 'center'} //单元格内容水平居中
+                ,{field:'money', title: '合同金额', align: 'right'}
+                ,{field:'createdate', title: '创建时间', align: 'right'} //单元格内容水平居中
+                ,{field:'earnest_money', title: '采购定金', align: 'right'}
+                ,{field:'dateofcollection', title: '预定付款日期', align: 'right'}
+                ,{field:'xg_contract_id', title: '销售合同编号', align: 'right'}
+                ,{fixed: 'right', align:'center', title:'管理',align:'center', toolbar: '#barDemo'}
+
+            ]]
+            ,done:function(res){
+//                console.log(res);
+            }
+        });
+        $('.buttonsel').on('click',function(){
+            var sk_time=$('input[name="time"]').val();
+            var name=$('input[name="k_name"]').val();
+            table.reload('idTest',{
+                where:{
+                    sk_time:sk_time,
+                    name:name,
+                }
+                ,page:{
+                    curr:1
+                }
+            })
+        })
+    });
+
+</script>
+</body>
+</html>
