@@ -50,6 +50,17 @@
 
 </div>
   </div>
+<div style="width: 98%;padding: 5px;border:2px solid skyblue;background: #f1f1f1">
+  <input type="hidden" name="cache_id" value="{$cache_id}">
+  <p style="width: 100%;text-align: center;font-size:16px">---- &nbsp;&nbsp;&nbsp; <b>附言</b> &nbsp;&nbsp;&nbsp; ----</p>
+  <div class="layui-form-item layui-form-text" style="margin-top: 30px;">
+    <label class="layui-form-label">附言:</label>
+    <div class="layui-input-block">
+      <textarea name="remark" placeholder="请输入内容" class="layui-textarea" style="width: 80%"></textarea>
+    </div>
+  </div>
+</div>
+  
   <script>
   $(function(){
      $.get("{:url('index/process/getTaskPageandContent')}",{task_id:"{$task_id}"},function(data){

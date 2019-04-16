@@ -221,11 +221,15 @@ class Process extends CommonController{
         }
     }
 
-    public function passTaskNode(){
+    public function passTaskNode(){   //审批节点通过
         if (Request::instance()->isPost()){
             $cache_id = input("post.cache_id");
-            $res = model("Process","service")->passNode($cache_id);
+            $remark = input("post.remark");
+            $res = model("Process","service")->passNode($cache_id,$remark);
             if($res){
+                if($res == 2){  //流程结束
+                     return json('success','审批操作成功，审批流程已完成！');
+                }
                 return json('success','审批操作成功！');
             }else{
                 return json('error','出现问题了！');

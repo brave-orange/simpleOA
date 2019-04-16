@@ -212,15 +212,15 @@ Class Process extends Model{
             ->order("opera_time asc")->select();
 
     }
-    public function passNode($cache_id,$remark,$stamp){
+    public function passNode($cache_id,$remark){
         $task = model("TaskCache")->get($cache_id);
-        $node = model("ProcessNode")->getNextNode($task["current_node_id"]);//下一节点信息
-        model("ProcessTask")->where(["task_id"=>$task["task_id"]])->update(["status"=>node["node_name"]]);
+        $node = model("ProcessNode")->get($task["current_node_id"]);//下一节点信息
+        model("ProcessTask")->where(["task_id"=>$task["task_id"]])->update(["status"=>$node["node_name"]]);
         $record = [];
         $record["task_id"] = $task["task_id"];
-        $count = model("ProcessRecord")->where(["task_id"=>$data["task_id"]])->count();
+        $count = model("ProcessRecord")->where(["task_id"=>$task["task_id"]])->count();
         $record["id"] = $record["task_id"]."-NO".($count+1);
-        $record["process_id"] = $node["process_id"];
+        $record["process_id"] = $node["processid"];
         $record["node_id"] = $node["nodeid"];
         $record["status"] = "pass";
         $record["opera_person"] = Session::get('name');
@@ -228,14 +228,23 @@ Class Process extends Model{
         $record["opera_time"] = date("Y-m-d H:i:s");
         $record["remark"] = $remark;
         if(model("ProcessRecord")->isUpdate(false)->data($record)->save()){
+            if(!$node["next_node"]){  //
+                model("ProcessTask")->where(["task_id"=>$task["task_id"]])->update(["iscomplete"=>1]);
+                model("TaskCache")->where(["id"=>$cache_id])->delete();//删除原任务
+                return 2;  //流程结束
+            }
             if(model("TaskCache")->where(["id"=>$cache_id])->delete()){
-                $task_next = $this->nextNode( $record["id"],$record["task_id"],$node["nodeid"]);//进入下一个审批节点，添加任务
+                if(!$node["next_node"]){  //
+                model("ProcessTask")->where(["task_id"=>$task["task_id"]])->update(["iscomplete"=>1]);
+            }
+                $nextnode = model("ProcessNode")->getNextNode($node["nodeid"]);
+                $task_next = $this->nextNode( $record["id"],$record["task_id"],$nextnode);//进入下一个审批节点，添加任务
                 if($task_next){
-                    return true;
+                    return 1;
                 }
             }
         } //添加操作记录
-        return false;
+        return 0;
 
     }
 

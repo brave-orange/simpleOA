@@ -40,6 +40,10 @@ class ProcessNode extends Model{
         return $this->where(['processid'=>$processid])->delete();
     }
     public function isLastNode($nodeid){
-        
+        $node = $this->get($nodeid);
+        if(!$node){
+            return true;
+        }
+        return false;
     }
 }

@@ -48,8 +48,7 @@ layui.use(['layer','table'], function() {
                       content: data,
                       scrollbar:true,
                       yes:function(index,layero){
-                        var data = $(".layui-layer-content").find("form").serialize();
-                        console.log(data);
+                        checkprocess();
                       },
                       btn2:function(index){
                         return false;
@@ -60,6 +59,43 @@ layui.use(['layer','table'], function() {
         }
     })
 })
+
+function checkprocess(){
+    layer.load(); //loadings
+    var data = {}
+    data['remark'] = $("textarea[name='remark']").val();
+    data['cache_id'] = $("input[name='cache_id']").val()
+    if(data['remark'].length == 0){
+        layer.msg("请输入附言，如不需要请输入空格。")
+        layer.closeAll('loading'); //关闭loading
+        return false;
+    }
+    layer.confirm('确定通过这个审批吗?', {
+      icon: 3,
+      skin: 'layer-ext-moon',
+      btn: ['确认','取消'] //按钮
+    }, function(){
+        $.post("/index/process/passTaskNode",data,function(data){
+        data=JSON.parse(data);
+            if(data.status == 'success'){
+                layer.msg(data.msg, {
+                    icon: 6,//成功的表情
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                }, function(){
+                    location.reload();
+                }); 
+            }else if(data.status == 'error'){
+                layer.msg(data.msg,{icon: 5});
+                return false;
+            }
+        })
+        layer.closeAll('loading'); //关闭loading
+  },function(){
+     layer.closeAll('loading'); //关闭loading
+  });
+    layer.closeAll('loading'); //关闭loading
+
+}
 
 function satrtprocess(){
     var content = $(".layui-layer-content").find("#start_content").find("form").serialize();
@@ -122,16 +158,15 @@ function contract_process_start(){
         data["id"] = $("input[name='id']").val();
         $.post("/index/contract/updateContractInfo",data,function(data1){
             data1=JSON.parse(data1);
-            console.log(data1);
             if(data1.status == 'success'){
-                layer.msg(data.msg, {
+                layer.msg(data1.msg, {
                     icon: 6,//成功的表情
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 }, function(){
                     location.reload();
                 }); 
             }else if(data1.status == 'error'){
-                layer.msg(data.msg,{icon: 5});
+                layer.msg(data1.msg,{icon: 5});
                 return false;
             }
         })
