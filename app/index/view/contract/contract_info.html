@@ -1,0 +1,182 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>未审批合同列表</title>
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="__STATIC__/css/mine.css"  media="all">
+    <script type="text/javascript" src="__STATIC__/js/jquery-1.9.1.min.js"></script>
+    <!-- <script type="text/javascript" src="__STATIC__/layer/layer/layer.js"></script> -->
+    <script src="__STATIC__/layui/layui.js"></script>
+</head>
+<body>
+<!--<blockquote class="layui-elem-quote">-->
+    <!--<h2><i class="layui-icon" style="color:skyblue;font-size: 20px;font-weight: 700; ">&#xe60a;</i> 未开始审批合同列表</h2>-->
+<!--</blockquote>-->
+
+<div class="layui-tab layui-tab-card" style="margin: 10px;border-radius: 15px;">
+    <ul class="layui-tab-title" style="border-top-right-radius: 15px;border-top-left-radius:15px;">
+        <li class="layui-this left-tab">采购合同{$data['c_id']}</li>
+        {foreach $data['x_id'] as $key=>&$val}
+        <li>销售合同{$val['xs_contract_id']}</li>
+        {/foreach}
+    </ul>
+    <div class="layui-tab-content" style="min-height: 500px;">
+        <!-- 采购合同列表 -->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+            <legend>采购合同信息</legend>
+        </fieldset>
+        <div class="layui-tab-item layui-show">
+            <table class="layui-table" lay-even="" lay-skin="row">
+               <thead>
+               <tr>
+                   <th>采购合同编号</th>
+                   <th>采购客户名称</th>
+                   <th>采购定金</th>
+                   <th>采购金额</th>
+                   <th>合同附件目录</th>
+                   <th>创建人</th>
+                   <th>合同创建时间</th>
+                   <th>预定付款日期</th>
+                   <th>备注</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr>
+                   <td>{$data[$data['c_id']]['contract_id']}</td>
+                   <td>{$data[$data['c_id']]['business_name']}</td>
+                   <td>{$data[$data['c_id']]['e_money']}</td>
+                   <td>{$data[$data['c_id']]['money']}</td>
+                   <td>{$data[$data['c_id']]['contract_file']}</td>
+                   <td>{$data[$data['c_id']]['creator']}</td>
+                   <td>{$data[$data['c_id']]['createdate']}</td>
+                   <td>{$data[$data['c_id']]['dateofcollection']}</td>
+                   <td>{$data[$data['c_id']]['remarks']}</td>
+               </tr>
+               </tbody>
+           </table>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+                <legend>采购商品信息</legend>
+            </fieldset>
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <thead>
+                <tr>
+                    <th>商品编号</th>
+                    <th>商品名称</th>
+                    <th>商品类型</th>
+                    <th>采购数量</th>
+                    <th>商品单位</th>
+                    <th>采购单价</th>
+                    <th>货币单位</th>
+                    <th>总价</th>
+                    <th>产地</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{$data[$data['c_id']]['contract_id']}</td>
+                    <td>{$data[$data['c_id']]['business_name']}</td>
+                    <td>{$data[$data['c_id']]['money']}</td>
+                    <td>{$data[$data['c_id']]['money']}</td>
+                    <td>{$data[$data['c_id']]['contract_file']}</td>
+                    <td>{$data[$data['c_id']]['creator']}</td>
+                    <td>{$data[$data['c_id']]['createdate']}</td>
+                    <td>{$data[$data['c_id']]['dateofcollection']}</td>
+                    <td>{$data[$data['c_id']]['remarks']}</td>
+                </tr>
+                </tbody>
+            </table>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+                <legend>付款核销明细</legend>
+            </fieldset>
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <thead>
+                <tr>
+                    <th>付款金额</th>
+                    <th>付款时间</th>
+                    <th>创建者</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{$data[$data['c_id']]['money']}</td>
+                    <td>{$data[$data['c_id']]['createdate']}</td>
+                    <td>{$data[$data['c_id']]['creator']}</td>
+                </tr>
+                </tbody>
+            </table>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+                <legend>收票核销明细</legend>
+            </fieldset>
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <thead>
+                <tr>
+                    <th>收票金额</th>
+                    <th>收票时间</th>
+                    <th>创建者</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{$data[$data['c_id']]['money']}</td>
+                    <td>{$data[$data['c_id']]['createdate']}</td>
+                    <td>{$data[$data['c_id']]['creator']}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /销售合同列表 -->
+        {foreach $data['x_id'] as $key=>&$val}
+        <div class="layui-tab-item">
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <thead>
+                <tr>
+                    <th>销售合同id</th>
+                    <th>销售客户名称</th>
+                    <th>销售金额</th>
+                    <th>合同附件目录</th>
+                    <th>创建人</th>
+                    <th>合同创建时间</th>
+                    <th>预定余款日期</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{$data[$val['xs_contract_id']]['contract_id']}</td>
+                    <td>{$data[$val['xs_contract_id']]['business_name']}</td>
+                    <td>{$data[$val['xs_contract_id']]['money']}</td>
+                    <td>{$data[$val['xs_contract_id']]['money']}</td>
+                    <td>{$data[$val['xs_contract_id']]['contract_file']}</td>
+                    <td>{$data[$val['xs_contract_id']]['creator']}</td>
+                    <td>{$data[$val['xs_contract_id']]['createdate']}</td>
+                    <td>{$data[$val['xs_contract_id']]['dateofcollection']}</td>
+                    <td>{$data[$val['xs_contract_id']]['remarks']}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {/foreach}
+
+
+        <!-- 采购合同列表 -->
+
+
+    </div>
+</div>
+
+
+<script>
+    window.onload = function(){
+        layui.use('element',function(){
+            var element = layui.element;
+        })
+    }
+
+
+</script>
+</body>
+</html>

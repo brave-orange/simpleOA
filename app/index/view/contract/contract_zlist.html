@@ -17,10 +17,6 @@
 </fieldset>
 <form class="layui-form" action="">
     <div class="layui-form-item">
-        <!--<label class="layui-form-label" style="width:88px">创建时间查询</label>-->
-        <!--<div class="layui-input-inline">-->
-        <!--<input type="text" name="time" class="layui-input" style="width:198px" id="test6">-->
-        <!--</dv>i-->
         <label class="layui-form-label">客户查询</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input" style="width:198px" name="k_name">
@@ -42,8 +38,8 @@
     </div>
     <table class="layui-hide" id="test" lay-filter="tooler"></table>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">显示到账进度</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">确认合同完成</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">查看项目详情</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">提交审核</a>
     </script>
 </form>
 <table id="demo" lay-filter="test"></table>
@@ -76,18 +72,11 @@
             ,id:'idTest'
             ,method:'post'
             ,cols: [[
-                {field:'contract_id', title: '合同编号'}
-                ,{field:'business_name', title: '客户名称'} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'contract_type', title: '合同类别'}
+                {field:'contract_id', title: '采购合同编号'}
                 ,{field:'contract_file', title: '合同附件'}
                 ,{field:'creator', title: '创建人', align: 'center'} //单元格内容水平居中
-                ,{field:'money', title: '合同金额', align: 'right'}
                 ,{field:'createdate', title: '创建时间', align: 'right'} //单元格内容水平居中
-                ,{field:'earnest_money', title: '采购定金', align: 'right'}
-                ,{field:'dateofcollection', title: '预定付款日期', align: 'right'}
-                ,{field:'xg_contract_id', title: '销售合同编号', align: 'right'}
-                ,{field:'contract_status', title: '合同状态', align: 'right'}
-//                ,{field:'remarks', title: '备注', align: 'right'}
+                ,{field:'未完成', title: '合同状态', align: 'right'}
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:220}
             ]]
             ,done:function(res){
@@ -107,6 +96,29 @@
                 }
             })
         })
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                console.log(data);
+//                layer.confirm('真的删除行么', function(index){
+//                    obj.del();
+//                    layer.close(index);
+//                });
+            } else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2,
+                    title:'项目详细信息',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['100%', '100%'],
+                    content: "{:url('index/contract/contract_info')}?contract_id="+data.contract_id
+                });
+            }
+        });
+
     });
 
 </script>

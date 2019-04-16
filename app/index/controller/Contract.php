@@ -2,6 +2,7 @@
 
 namespace app\index\controller;
 use app\common\controller\CommonController;
+use \think\View;
 
 class Contract extends CommonController{
     //添加合同总览
@@ -33,8 +34,23 @@ class Contract extends CommonController{
         return view();
     }
     //添加商品
-    public  function contract_goods(){
-        return view();
+    public function contract_info(){
+        if(request()->isGet()){
+            $contract_id=input("param.contract_id");
+            $com_data=Model('ComContract')->field('xs_contract_id')->where('cg_contract_id',$contract_id)->select();
+            $array=[];
+            foreach($com_data as $key=>&$val){
+                $x_data=Model('contract')->where('contract_id',$val['xs_contract_id'])->find();
+                $array[$val['xs_contract_id']]=$x_data;
+            }
+            $c_data=Model('contract')->where('contract_id',$contract_id)->find();
+            $array[$contract_id]=$c_data;
+            $array['c_id']=$contract_id;
+            $array['x_id']=$com_data;
+            $view=new View();
+            $view->assign('data',$array);
+            return $view->fetch();
+        }
     }
     //合同添加商品
     public function goods_data(){
